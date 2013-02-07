@@ -1,0 +1,8 @@
+*.pyc
+*~
+*.db
+*.txt
+*.json
+*.sql
+*.pickle
+*.bat
