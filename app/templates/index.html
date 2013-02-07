@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+Latest Games
+{% for match in matches.items %}{% include 'match-preview.html' %}{%
+endfor %}
+
+{% if matches.has_prev %}<a href="{{ url_for('index', page = matches.prev_num) }}"><< Newer matches</a>{% else %}                {% endif %} | {% if matches.has_next %}<a href="{{ url_for('index', page = matches.next_num) }}">Older matches >></a>{% else %}{% endif %}
+
+
+Player Pages
+{% for (name, id) in players %}<a href="{{url_for('player', id=id)}}">{{name}}</a>
+{% endfor %}
+{% endblock %}
