@@ -6,6 +6,7 @@
 *.sql
 *.pickle
 *.bat
+*.sh
 *.py[cod]
 
 # C extensions
@@ -41,3 +42,9 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+# don't include our api key
+api_key.py
+
+
+
