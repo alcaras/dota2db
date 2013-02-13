@@ -73,7 +73,8 @@ def get_page(url, count=0):
     import requests
     try:
 #    print 'GET %s' % (url, )
-        return requests.get(url)
+        # need verify=False for our hosting provider
+        return requests.get(url, verify=False) 
     except Exception, e:
         print  datetime.datetime.now(), "Exception:", e, sys.exc_info()[0]
         print '-'*60
