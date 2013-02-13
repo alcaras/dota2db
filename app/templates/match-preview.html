@@ -13,7 +13,14 @@
 <th colspan=2>
 {{ helpers[match.id]["duration"] }}
 </th>
-<th colspan=6>
+<th colspan=3>
+<div align="center">
+{% if match.is_significant_p == False %}
+<span class="badge">Insignificant</span>
+{% endif %}
+</div>
+</th>
+<th colspan=3>
 <div align="right">
 <a href="{{ url_for('match', id = match.id) }}">Match {{match.id}}</a>
 </div>
