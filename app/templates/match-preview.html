@@ -1,2 +1,82 @@
-this is a match preview for id: <a href="{{ url_for('match', id = match.id) }}">{{match.id}}</a>
+<table class="table table-striped table-condensed sortable" id="sortable{{match.id}}">
+<thead>
+<tr>
+<th colspan=1>
+{{ momentjs(match.starttime).fromNow() }}
+</th>
+<th colspan=2>
+{{ helpers[match.id]["mode"] }}
+</th>
+<th colspan=3>
+{{ helpers[match.id]["cluster"] }}
+</th>
+<th colspan=2>
+{{ helpers[match.id]["duration"] }}
+</th>
+<th colspan=6>
+<div align="right">
+<a href="{{ url_for('match', id = match.id) }}">Match {{match.id}}</a>
+</div>
+</th>
+</tr>
+<tr>
+<th class="name"></th>         <!-- 01 -->
+<th class="number">kda</th>     <!-- 02 -->
+<th class="points">hp</th>       <!-- 03 -->
+<th class="number">lvl</th>      <!-- 04 -->
+<th class="hero" class="unsortable">hero</th>     <!-- 05 -->
+<th class="number">k</th>        <!-- 06 -->
+<th class="number">d</th>        <!-- 07 -->
+<th class="number">a</th>        <!-- 08 -->
+<th class="large_number">lh</th>       <!-- 09 -->
+<th class="number">dn</th>       <!-- 10 -->
+<th class="large_number">lh/m</th>     <!-- 11 -->
+<th class="large_number">gpm</th>      <!-- 12 -->
+<th class="large_number">xpm</th>      <!-- 13 -->
+<th class="victory" class="unsortable">&star;</th>         <!-- 14 -->
+</tr>
+</thead>
+<tbody>
+{% for player in players_for_match[match.id] %}
+<tr>
+<td class="name">
+{% if helpers[match.id]["p"][player.player_slot] != "" %}
+<a href="{{url_for('player',  id=player.account_id)}}">
+{{helpers[match.id]["p"][player.player_slot]}}
+</a>
+{% endif %}
+</td>
+<td class="number">{{ helpers[match.id]["kda"][player.player_slot]|safe }}</td>
+<td class="points">
+{% if player.points >= 60 %}
+<span class="badge badge-info">
+{% elif player.points >= 50 %}
+<span class="badge badge-success">
+{% elif player.points >= 40 %}
+<span class="badge badge-warning">
+{% else %}
+<span class="badge badge-important">
+{% endif %}
+
+{{player.points}}</span>
+</td>
+<td class="number">{{player.level}}</td>
+<td class="hero">{{player.hero_id}}</td>
+<td class="number">{{player.kills}}</td>
+<td class="number">{{player.deaths}}</td>
+<td class="number">{{player.assists}}</td>
+<td class="large_number">{{player.last_hits}}</td>
+<td class="number">{{player.denies}}</td>
+<td class="large_number">{{ helpers[match.id]["lh/m"][player.player_slot] }}</td>
+<td class="large_number">{{player.gold_per_min}}</td>
+<td class="large_number">{{player.xp_per_min}}</td>
+<td class="victory">
+{% if player.win %}
+<i class="icon-star"></i>
+{% endif %}
+</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
 

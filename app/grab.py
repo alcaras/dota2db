@@ -249,7 +249,7 @@ def grab_match(id):
 date_min = None
 
 if refreshOnly == True:
-  date_min = int(time.mktime((datetime.datetime.now() - datetime.timedelta(hours=168)).timetuple()))
+  date_min = int(time.mktime((datetime.datetime.now() - datetime.timedelta(hours=48)).timetuple()))
   print "only refreshing back to", datetime.datetime.fromtimestamp(date_min)
 
 rid = []

@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-this is a match (full display page)
-id: {{match_id}}
+<div class="span12">
+<h2>Match {{match.id}}</h2>
+{% include 'match-preview.html' %}
+</div>
 
-back to <a href="{{url_for('index')}}">index</a>
+
 {% endblock %}

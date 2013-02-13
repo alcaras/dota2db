@@ -1,0 +1,26 @@
+td.name {
+    width : 30%;
+    text-align: left;
+}
+
+td.number {
+    text-align: right;
+    width: 4%;
+}
+
+td.large_number {
+    text-align: right;
+    width: 6%;
+}
+
+td.points {
+
+}
+
+td.hero {
+
+}
+
+td.victory {
+
+}
