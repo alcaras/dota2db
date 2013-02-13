@@ -57,7 +57,7 @@ import math
 import sys
 
 # calculate hero points for a player
-def calculateHeroPoints(p):
+def calculateHeroPoints(p, duration=None):
     
     a = p.account_id
     if a not in hero_avg:
@@ -65,7 +65,7 @@ def calculateHeroPoints(p):
         
     h = p.hero_id
 
-    if p.match_id == None: # why are there players with empty matches?
+    if duration == None and p.match_id == None: # why are there players with empty matches?
         # if p.account_id == ANONYMOUS_ID:
         #     print ".. anon null match_id"
         # elif a == ANONYMOUS_ID:
@@ -103,7 +103,11 @@ def calculateHeroPoints(p):
 
         score += stat_weights[s] * bonus
 
-        dis = p.match.duration
+        if duration == None:
+            dis = p.match.duration
+        else:
+            dis = duration
+
         if dis <= (20*60) and (p.win==1):
             score += 5  # stomp bonus
         if dis > (20*60) and (p.win==1):

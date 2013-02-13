@@ -2,7 +2,7 @@
 <thead>
 <tr>
 <th colspan=1>
-{{ momentjs(match.starttime).fromNow() }}
+{{ momentjs(match.starttime).calendar() }}
 </th>
 <th colspan=2>
 {{ helpers[match.id]["mode"] }}
@@ -22,9 +22,9 @@
 <tr>
 <th class="name"></th>         <!-- 01 -->
 <th class="number">kda</th>     <!-- 02 -->
-<th class="points">hp</th>       <!-- 03 -->
-<th class="number">lvl</th>      <!-- 04 -->
-<th class="hero" class="unsortable">hero</th>     <!-- 05 -->
+<th class="points">points</th>       <!-- 03 -->
+<th class="hero unsortable">hero</th>     <!-- 04 -->
+<th class="number">lvl</th>      <!-- 05 -->
 <th class="number">k</th>        <!-- 06 -->
 <th class="number">d</th>        <!-- 07 -->
 <th class="number">a</th>        <!-- 08 -->
@@ -33,7 +33,7 @@
 <th class="large_number">lh/m</th>     <!-- 11 -->
 <th class="large_number">gpm</th>      <!-- 12 -->
 <th class="large_number">xpm</th>      <!-- 13 -->
-<th class="victory" class="unsortable">&star;</th>         <!-- 14 -->
+<th class="victory unsortable">&star;</th>         <!-- 14 -->
 </tr>
 </thead>
 <tbody>
@@ -48,20 +48,26 @@
 </td>
 <td class="number">{{ helpers[match.id]["kda"][player.player_slot]|safe }}</td>
 <td class="points">
-{% if player.points >= 60 %}
+{% if player.points >= 80 %}
+<span class="badge badge-inverse">
+{% elif player.points >= 65 %}
+<span class="badge badge-epic">
+{% elif player.points >= 55 %}
 <span class="badge badge-info">
-{% elif player.points >= 50 %}
+{% elif player.points >= 45 %}
 <span class="badge badge-success">
-{% elif player.points >= 40 %}
+{% elif player.points >= 35 %}
 <span class="badge badge-warning">
+{% elif player.points == -100 %}
+<span class="badge">
 {% else %}
 <span class="badge badge-important">
 {% endif %}
 
 {{player.points}}</span>
 </td>
+<td class="hero">{{helpers[match.id]["hero"][player.player_slot]|safe}}</td>
 <td class="number">{{player.level}}</td>
-<td class="hero">{{player.hero_id}}</td>
 <td class="number">{{player.kills}}</td>
 <td class="number">{{player.deaths}}</td>
 <td class="number">{{player.assists}}</td>

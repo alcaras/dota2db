@@ -14,13 +14,54 @@ td.large_number {
 }
 
 td.points {
+    text-align: center;
 
 }
 
 td.hero {
+    padding: 0px;
+    vertical-align: middle;
+    text-align: center;
 
 }
 
 td.victory {
 
+}
+
+th.name {
+    width : 30%;
+    text-align: left;
+}
+
+th.number {
+    text-align: right;
+    width: 4%;
+}
+
+th.large_number {
+    text-align: right;
+    width: 6%;
+}
+
+th.points {
+    text-align: center;
+}
+
+th.hero {
+    text-align: center;
+
+}
+
+th.victory {
+
+}
+
+.badge-epic {
+  background-color: #7a43b6;
+}
+
+
+.badge-legendary {
+  background-color: #000000;
 }

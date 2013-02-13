@@ -12,6 +12,8 @@ pp = pprint.PrettyPrinter(indent = 4)
 import pdb
 import sys
 
+from nhp import calculateHeroPoints
+
 print "hello from the webapi grab"
 
 name_id = NAME_ID
@@ -158,6 +160,8 @@ def grab_match(id):
 
   for p in players:
     pl = {}
+
+
     pl["win"] = False
 
     pl["player_slot"] = p["player_slot"]
@@ -167,6 +171,13 @@ def grab_match(id):
     if p["player_slot"] < 128: # Radiant
       if match["radiant_win"] == True:
         pl["win"] = True
+      else:
+        pl["win"] = False
+    else: # dire
+      if match["radiant_win"] == False:
+        pl["win"] = True
+      else:
+        pl["win"] = False
 
 
 
@@ -236,7 +247,9 @@ def grab_match(id):
                         pl["xp_per_min"], pl["win"])
 
 
+    new_player.points = calculateHeroPoints(new_player, duration=match["duration"])
     new_match.players.extend([new_player])
+
   
 
     

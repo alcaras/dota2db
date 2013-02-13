@@ -11,3 +11,4 @@ app.jinja_env.globals['momentjs'] = momentjs
 db = SQLAlchemy(app)
 
 from app import views, models
+
