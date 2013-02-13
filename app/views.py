@@ -64,7 +64,11 @@ def matches_and_players(matches):
                     helpers[m]["kda"][p.player_slot] = str(round(float(p.kills + p.assists)/(p.deaths), 1))
                 else:
                     helpers[m]["kda"][p.player_slot] = '&infin;'
-                helpers[m]["lh/m"][p.player_slot] = str(round(float(p.last_hits)/float(match.duration/60),1))
+                
+                if match.duration/60 != 0:
+                    helpers[m]["lh/m"][p.player_slot] = str(round(float(p.last_hits)/float(match.duration/60),1))
+                else:
+                     helpers[m]["lh/m"][p.player_slot] = '&infin;'
 
                 
                 helpers[m]["hero"][p.player_slot] = "<img src=\"/static/img/" + string.replace(p.hero.name, "npc_dota_hero_", "") + "_sm.png\" alt=\"" + p.hero.localized_name + "\" title=\"" + p.hero.localized_name + "\" width=47 height=26 />"

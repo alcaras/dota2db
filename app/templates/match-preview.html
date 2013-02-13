@@ -73,7 +73,7 @@
 <td class="number">{{player.assists}}</td>
 <td class="large_number">{{player.last_hits}}</td>
 <td class="number">{{player.denies}}</td>
-<td class="large_number">{{ helpers[match.id]["lh/m"][player.player_slot] }}</td>
+<td class="large_number">{{ helpers[match.id]["lh/m"][player.player_slot]|safe }}</td>
 <td class="large_number">{{player.gold_per_min}}</td>
 <td class="large_number">{{player.xp_per_min}}</td>
 <td class="victory">
