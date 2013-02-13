@@ -6,6 +6,7 @@ Tools for accessing the Dota 2 match history web API
 """
 import traceback
 import datetime
+import sys
 import time
 SLEEP_DELAY = 1.1
 
