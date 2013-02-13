@@ -29,7 +29,6 @@ refreshOnly = True # usually should be true, unless you're adding someone new
 fullCrawlFor = "" # set this to an id to full crawl
 enableFullCrawl = False # set this to true for a full crawl (for a particular person)
 
-
 import datetime
 import time
 
