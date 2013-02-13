@@ -7,6 +7,9 @@ import string
 import operator
 
 from flask import render_template
+
+from flask.ext.paginate import Pagination
+
 from models import *
 
 from constants import *
@@ -38,8 +41,16 @@ def matches_and_players(matches):
         helpers[m]["hero"] = {}
         helpers[m]["lh/m"] = {}
 
-        helpers[m]["mode"] = GAME_MODES[match.game_mode]
-        helpers[m]["cluster"] = CLUSTERS[match.cluster]
+        if match.game_mode in GAME_MODES:
+            helpers[m]["mode"] = GAME_MODES[match.game_mode]
+        else:
+            helpers[m]["mode"] = "Game Mode " + str(match.game_mode)
+
+        if match.cluster in CLUSTERS:
+            helpers[m]["cluster"] = CLUSTERS[match.cluster]
+        else:
+            helpers[m]["cluster"] = "Cluster " + str(match.cluster)
+
         helpers[m]["duration"] = str(datetime.timedelta(seconds=int(match.duration)))
 
         for p in players:
@@ -76,7 +87,11 @@ def matches_and_players(matches):
 @app.route('/index')
 @app.route('/index/<int:page>')
 def index(page = 1):
-    matches_query = Match.query.order_by(Match.starttime.desc()).paginate(page, MATCHES_PER_PAGE, False)
+    matches_query = Match.query.order_by(Match.starttime.desc())
+    display_msg = '''Matches <b>{start} - {end}</b> of 
+<b>{total}</b>'''
+    matches_pagination = Pagination(page=page, per_page = MATCHES_PER_PAGE, total=matches_query.count(), display_msg = display_msg)
+    matches_query = matches_query.paginate(page, MATCHES_PER_PAGE, False)
 
     (matches, players_for_match, helpers) = matches_and_players(matches_query.items)
 
@@ -87,6 +102,7 @@ def index(page = 1):
                             key = lambda s: s[0].lower())
     
     return render_template("index.html", matches = matches_query,
+                           pagination = matches_pagination,
                            players_for_match = players_for_match,
                            helpers = helpers,
                            player_pages = sorted_players)

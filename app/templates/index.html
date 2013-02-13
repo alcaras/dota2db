@@ -1,38 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="span9">
-<h2>Latest Matches</h2>
+<h2>{{ pagination.info|safe }}</h2>
 <div class="well">
 <ul class="nav nav-pills nav-stacked">
+
+<li>{{ pagination.links|safe }}</li>
+
 {% for match in matches.items %}
 <li>{% include 'match-preview.html' %}</li>
 {% endfor %}
-</ul>
-
-<ul class="pager">
-{% if matches.has_prev %}
-<li class="previous">
-<a href="{{ url_for('index', page = matches.prev_num) }}">
-<< Newer matches
-</a>
-</li>
-{% else %}
-<li class="previous disabled">
-<a href="#"><< Newer matches</a>
-</li>
-{% endif %}
-
-{% if matches.has_next %}
-<li class="next">
-<a href="{{ url_for('index', page = matches.next_num) }}">
-Older matches >>
-</a>
-</li>
-{% else %}
-<li class="next disabled">
-<a href="#">Older matches >></a>
-</li>
-{% endif %}
+<li>{{ pagination.links|safe }}</li>
 </ul>
 
 
@@ -40,7 +18,7 @@ Older matches >>
 </div>
 
 <div class="span3">
-<h2>Player Pages</h2>
+<h2>Players</h2>
 <div class="well">
 <ul class="nav nav-pills nav-stacked">
 {% for (name, id) in player_pages %}
