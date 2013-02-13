@@ -15,6 +15,4 @@ db = SQLAlchemy(app)
 
 from app import views, models
 
-@app.before_request
-def before_request():
-  g.start = time.time()
+
