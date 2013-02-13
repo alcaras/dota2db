@@ -74,9 +74,9 @@ print "hello from the nhp"
 def obtain_matches_with_account_id(account_id):
     ids = []
     if account_id == ANONYMOUS_ID:
-        l = session.query(Player.match_id).all()
+        l = session.query(Player.match_id).join(Player.match).filter_by(is_significant_p=True).all()
     else:
-        l = session.query(Player.match_id).filter_by(account_id=account_id).all()
+        l = session.query(Player.match_id).filter_by(account_id=account_id).join(Player.match).filter_by(is_significant_p=True).all()
     ids = [item for sublist in l for item in sublist]
     ids = list(set(ids))
     return ids
@@ -115,6 +115,7 @@ pstd = {}
 
 for p, id in name_id.iteritems():
     # step 1 -- we need a list of matches with the player in them
+    print "getting matches for ", p, "..."
     matches = obtain_matches_with_account_id(id)
     print len(matches), "matches found for ", p
     print "analyzing..."
@@ -132,13 +133,9 @@ for p, id in name_id.iteritems():
 
 #        print "Analyzing", hero.localized_name, "..."
         if id == ANONYMOUS_ID: # pull everything in for anon
-            players = session.query(Player).filter(Player.hero == hero,
-                                                   Player.points > -100).all()
+            players = session.query(Player).filter(Player.hero == hero, Player.points > -100).join(Match).filter(Match.is_significant_p==True).all()
         else:
-            players = session.query(Player).filter(Player.hero == hero,
-                                             Player.account_id != id,
-                                             Player.match_id.in_(matches),
-                                             Player.points > -100).all()
+            players = session.query(Player).filter(Player.hero == hero, Player.account_id != id, Player.match_id.in_(matches), Player.points > -100).join(Match).filter(Match.is_significant_p==True).all()
 
         (havg[hero.id], hstd[hero.id]) = analyze_player_performances(players)
 

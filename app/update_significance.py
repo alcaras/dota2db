@@ -44,20 +44,41 @@ import os
 
 matches = session.query(Match).all()
 
+flagged = 0
+
 for i, m in enumerate(matches):
     if i % (len(matches)/20) == 0:
         print i+1, "/", len(matches)
 
 
-    print "marking", m.id, "as insignificant: ",
-    print "insufficient number of human players (", m.human_players, ")"
-    
-    for j, p in m.players:
+
+    if m.human_players < 10:
+        print "marking", m.id, "as insignificant: ",
+        print "insufficient number of human players (", m.human_players, ")"
+        m.is_significant_p = False
+        flagged += 1
         continue
+
+    break_me = False
+
+    for j, p in enumerate(m.players):
+        if p.leaver_status == 2:
+            print "marking", m.id, "as insignificant: ",
+            print p.player_slot, "abandoned"
+            m.is_significant_p = False
+            break_me = True
+            flagged += 1
+            continue
+
+
+    if break_me == True:
+        continue
+
+    m.is_significant_p = True
     
 
     
-
-#session.commit()
+print flagged, "insignificant games"
+session.commit()
 
 

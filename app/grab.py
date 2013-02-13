@@ -94,6 +94,8 @@ def grab_match(id):
 
   
   print "Parsing new match " + str(id)
+
+  abandons = 0
   
   req = get_match_details(id)
   if req == None:
@@ -231,8 +233,10 @@ def grab_match(id):
     pl["hero_healing"] = p["hero_healing"]
     pl["tower_damage"] = p["tower_damage"]
     
-    # need to figure out what these values mean
+    # 0 = okay, 1 = left after safe, 2 = abandon, 3 = ?, 4 = ?
     pl["leaver_status"] = p["leaver_status"]
+    if pl["leaver_status"] == 2:
+      abandons += 1
     
 
     # players = [player, hero, level, k, d, a, lh, dn, xpm, gpm, [items]]
@@ -248,9 +252,19 @@ def grab_match(id):
 
 
     new_player.points = calculateHeroPoints(new_player, duration=match["duration"])
+
+  
+    
     new_match.players.extend([new_player])
 
   
+  new_match.is_significant_p = True
+
+  if new_match.human_players < 10:
+    new_match.is_significant_p = False
+
+  if abandons > 0:
+    new_match.is_significant_p = False
 
     
   session.add(new_match)
