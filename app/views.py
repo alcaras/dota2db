@@ -61,7 +61,7 @@ def matches_and_players(matches):
                 else:
                     helpers[m]["p"][p.player_slot] = ''
                 if p.deaths > 0:
-                    helpers[m]["kda"][p.player_slot] = str(round(float((p.kills+p.assists)/p.deaths),1))
+                    helpers[m]["kda"][p.player_slot] = str(round(float(p.kills + p.assists)/(p.deaths), 1))
                 else:
                     helpers[m]["kda"][p.player_slot] = '&infin;'
                 helpers[m]["lh/m"][p.player_slot] = str(round(float(p.last_hits)/float(match.duration/60),1))

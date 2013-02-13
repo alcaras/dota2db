@@ -31,3 +31,33 @@
 # 
 
 
+# this file actually updates the points
+from models import *
+from db import session
+
+from nhp import calculateHeroPoints
+
+import sys
+
+import pdb
+import os
+
+matches = session.query(Match).all()
+
+for i, m in enumerate(matches):
+    if i % (len(matches)/20) == 0:
+        print i+1, "/", len(matches)
+
+
+    print "marking", m.id, "as insignificant: ",
+    print "insufficient number of human players (", m.human_players, ")"
+    
+    for j, p in m.players:
+        continue
+    
+
+    
+
+#session.commit()
+
+
