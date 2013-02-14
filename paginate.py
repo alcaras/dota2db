@@ -3,7 +3,7 @@
 
 from __future__ import unicode_literals
 from flask import request, url_for, session
-import pdb
+
 
 first_page = '<li class="disabled"><a href="#">{0}</a></li>'
 last_page = '<li class="disabled"><a href="#">{0}</a></li>'
@@ -99,7 +99,8 @@ class Pagination(object):
 
     @property
     def args(self):
-        args = request.args.to_dict()
+        args = dict(request.args.to_dict().items() + request.view_args.items())
+        print args
         args.pop('page', None)
         return args
 
@@ -224,9 +225,6 @@ class Pagination(object):
 
         if page == self.total_pages:
             return self.last_page
-
-        print "HELLO WORLD", "[", self.name, "]"
-
 
         if self.name == '':
             return link.format(url_for(self.endpoint, page=page, **self.args),  page)

@@ -9,6 +9,8 @@ import operator
 
 from flask import render_template
 from flask import abort
+from flask import request
+
 
 # forking our own
 from paginate import Pagination
@@ -130,6 +132,15 @@ def match(id):
 @app.route('/player/<string:name>/page/<int:page>')
 def player(name, page = 1):
 
+
+    print request
+    print "in player: ", request.args.to_dict()
+    print "in player.. ", request.base_url
+    print "in player! ", request.url_root
+    print "in player~ ", request.path
+    print "in player> ", request.endpoint
+    print "in player) ", request.view_args
+
     if str(name) in NAME_ID.keys():
         player_name = name
         player_id = NAME_ID[str(name)]
@@ -140,11 +151,10 @@ def player(name, page = 1):
     matches_query = Match.query.join(Player).filter(Player.account_id==player_id).order_by(Match.starttime.desc())
     display_msg = '''Matches <b>{start} - {end}</b> of 
 <b>{total}</b>'''
-    matches_pagination = Pagination(page=page,
-                                    per_page = MATCHES_PER_PAGE,
+    matches_pagination = Pagination(per_page = MATCHES_PER_PAGE,
                                     total=matches_query.count(),
                                     display_msg = display_msg,
-                                    name = name)
+                                    page = page)
     matches_query = matches_query.paginate(page, MATCHES_PER_PAGE, False)
 
     (matches, players_for_match, helpers) = matches_and_players(matches_query.items)
