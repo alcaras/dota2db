@@ -1,12 +1,37 @@
 {% extends "base.html" %}
 {% block content %}
-this is a player page (full display page)
-id: {{player_id}}
+<div class="row">
+  <div class="span12">
+    <h2>{{player_name}}</h2>
+  </div>
+</div>
+<div class="row">
+  <div class="span9">
+    <h3>{{ pagination.info|safe }}</h3>
+    <div class="well">
+      <ul class="nav nav-pills nav-stacked">
+	
+	<li>{{ pagination.links|safe }}</li>
+	
+	{% for match in matches.items %}
+	<li>{% include 'match-preview.html' %}</li>
+	{% endfor %}
 
-tabs
-(recent games)
+	<li>{{ pagination.links|safe }}</li>
 
-(hero table)
+      </ul>
+    </div>
+  </div>
+  <div class="span3">
+    <div class="well">
+      <ul class="nav nav-pills nav-stacked">
+	<li class="active"><a href="#">Matches</a></li>
+	<li><a href="">Heroes</a></li>
+	<li><a href="">Records</a></li>
+	<li><a href="">Trends</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
 
-back to <a href="{{url_for('index')}}">index</a>
 {% endblock %}

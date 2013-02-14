@@ -8,8 +8,10 @@ import operator
 
 
 from flask import render_template
+from flask import abort
 
-from flask.ext.paginate import Pagination
+# forking our own
+from paginate import Pagination
 
 from flask import g
 
@@ -115,7 +117,7 @@ def index(page = 1):
                            helpers = helpers,
                            player_pages = sorted_players)
 
-@app.route('/match/<id>')
+@app.route('/match/<int:id>')
 def match(id):
     match = Match.query.filter(Match.id == id).first()
     matches_query = [match]
@@ -124,7 +126,35 @@ def match(id):
     
     return render_template("match.html", match = match, players_for_match=players_for_match, helpers=helpers)
 
-@app.route('/player/<id>')
-def player(id):
-    return render_template("player.html", player_id = id)
+@app.route('/player/<string:name>')
+@app.route('/player/<string:name>/page/<int:page>')
+def player(name, page = 1):
+
+    if str(name) in NAME_ID.keys():
+        player_name = name
+        player_id = NAME_ID[str(name)]
+    else:
+        abort(404)
+
+
+    matches_query = Match.query.join(Player).filter(Player.account_id==player_id).order_by(Match.starttime.desc())
+    display_msg = '''Matches <b>{start} - {end}</b> of 
+<b>{total}</b>'''
+    matches_pagination = Pagination(page=page,
+                                    per_page = MATCHES_PER_PAGE,
+                                    total=matches_query.count(),
+                                    display_msg = display_msg,
+                                    name = name)
+    matches_query = matches_query.paginate(page, MATCHES_PER_PAGE, False)
+
+    (matches, players_for_match, helpers) = matches_and_players(matches_query.items)
+
+
+
+
+    return render_template("player.html", matches = matches_query,
+                           pagination = matches_pagination,
+                           players_for_match = players_for_match,
+                           helpers = helpers,
+                           player_name = player_name)
 
