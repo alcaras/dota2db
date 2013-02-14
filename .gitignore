@@ -5,8 +5,8 @@
 *.json
 *.sql
 *.pickle
-*.bat
 *.sh
+*.bat
 *.py[cod]
 
 # C extensions
