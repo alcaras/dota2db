@@ -4,7 +4,6 @@
 from __future__ import unicode_literals
 from flask import request, url_for, session
 
-
 first_page = '<li class="disabled"><a href="#">{0}</a></li>'
 last_page = '<li class="disabled"><a href="#">{0}</a></li>'
 prev_page = '<li><a href="{0}">{1}</a></li>'
@@ -77,9 +76,6 @@ class Pagination(object):
         if self.alignment:
             self.alignment = ' pagination-{0}'.format(self.alignment)
 
-        self.name = kwargs.get('name', '')
-        
-
     @property
     def total_pages(self):
         pages = divmod(self.total, self.per_page)
@@ -100,7 +96,6 @@ class Pagination(object):
     @property
     def args(self):
         args = dict(request.args.to_dict().items() + request.view_args.items())
-        print args
         args.pop('page', None)
         return args
 
@@ -108,42 +103,24 @@ class Pagination(object):
     def prev_page(self):
         if self.has_prev:
             page = self.page - 1 if self.page > 2 else None
-            if self.name == '':
-                return prev_page.format(url_for(self.endpoint,
-                                                page=page,
-                                                **self.args
-                                                ),
-                                        self.prev_label
-                                        )
-            else:
-                return prev_page.format(url_for(self.endpoint,
-                                                page=page,
-                                                name=self.name,
-                                                **self.args
-                                                ),
-                                        self.prev_label
-                                        )
-            
+            return prev_page.format(url_for(self.endpoint,
+                                            page=page,
+                                            **self.args
+                                            ),
+                                    self.prev_label
+                                    )
+
         return disabled_page.format(self.prev_label)
 
     @property
     def next_page(self):
         if self.has_next:
-            if self.name == '':
-                return next_page.format(url_for(self.endpoint,
-                                                page=self.page + 1,
-                                                **self.args
-                                                ),
-                                        self.next_label
-                                        )
-            else:
-                return next_page.format(url_for(self.endpoint,
-                                                page=self.page + 1,
-                                                name=self.name,
-                                                **self.args
-                                                ),
-                                        self.next_label
-                                        )
+            return next_page.format(url_for(self.endpoint,
+                                            page=self.page + 1,
+                                            **self.args
+                                            ),
+                                    self.next_label
+                                    )
 
         return disabled_page.format(self.next_label)
 
@@ -151,32 +128,20 @@ class Pagination(object):
     def first_page(self):
         # current page is first page
         if self.has_prev:
-            if self.name == '':
-                return link.format(url_for(self.endpoint, **self.args), 1)
-            else:
-                return link.format(url_for(self.endpoint, name=self.name, **self.args), 1)
+            return link.format(url_for(self.endpoint, **self.args), 1)
 
         return active_page.format(1)
 
     @property
     def last_page(self):
         if self.has_next:
-            if self.name == '':
-                return link.format(url_for(self.endpoint,
-                                           page=self.total_pages,
-                                           **self.args
-                                           ),
-                                   self.total_pages
-                                   )
-            else:
-                return link.format(url_for(self.endpoint,
-                                           page=self.total_pages,
-                                           name = self.name,
-                                           **self.args
-                                           ),
-                                   self.total_pages
-                                   )
-            
+            return link.format(url_for(self.endpoint,
+                                       page=self.total_pages,
+                                       **self.args
+                                       ),
+                               self.total_pages
+                               )
+
         return active_page.format(self.page)
 
     @property
@@ -226,10 +191,9 @@ class Pagination(object):
         if page == self.total_pages:
             return self.last_page
 
-        if self.name == '':
-            return link.format(url_for(self.endpoint, page=page, **self.args),  page)
-        else:
-            return link.format(url_for(self.endpoint, page=page, name=self.name, **self.args),  page)
+        return link.format(url_for(self.endpoint, page=page, **self.args),
+                           page
+                           )
 
     @property
     def links(self):
