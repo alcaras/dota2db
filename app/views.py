@@ -132,15 +132,6 @@ def match(id):
 @app.route('/player/<string:name>/page/<int:page>')
 def player(name, page = 1):
 
-
-    print request
-    print "in player: ", request.args.to_dict()
-    print "in player.. ", request.base_url
-    print "in player! ", request.url_root
-    print "in player~ ", request.path
-    print "in player> ", request.endpoint
-    print "in player) ", request.view_args
-
     if str(name) in NAME_ID.keys():
         player_name = name
         player_id = NAME_ID[str(name)]
