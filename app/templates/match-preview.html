@@ -46,7 +46,11 @@
 </thead>
 <tbody>
 {% for player in players_for_match[match.id] %}
-<tr>
+{% if player.player_slot < 100 %}
+<tr class="radiant">
+{% else %}
+<tr class="dire">
+{% endif %}
 <td class="name">
 {% if helpers[match.id]["p"][player.player_slot] != "" %}
 <a href="{{url_for('player',  name=helpers[match.id]["p"][player.player_slot])}}">
