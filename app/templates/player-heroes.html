@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+  <div class="span12">
+    <h2>{{player_name}}</h2>
+  </div>
+  <div class="span12">
+    <h3>Heroes</h3>
+    
+
+  </div>
+</div>
+<div class="row">
+  <div class="span9">
+    <div class="well">   
+    <table class="table table-striped table-condensed sortable" id="sortableheroes">
+      <thead>
+	<tr>
+	  <th class="unsortable"></th>
+	  <th>hero</th>
+	  <th>played</th>
+	  <th>wins</th>
+	  <th>kda</th>
+	  <!-- possibly kills, deaths, assists, gpm, xpm averages -->
+	  <th>avg. points</th>
+	  <th>win %</th>
+	  <th>win score</th>
+	  <th>overall hero score</th>
+	</tr>
+	
+      </thead>
+
+      <tbody class="list">
+	{% for h in heroes %}
+	<tr>
+	  <td>{{h.Hero.img_inline()|safe}}</td>
+	  <td>{{h.Hero.localized_name}}</td>
+	  <td>{{h.played}}</td>
+	  <td>{{h.wins}}</td>
+	  <td>{{h.kda|safe}}</td>
+	  <td class="points">
+{% if h.points_avg >= 80 %}
+<span class="badge badge-inverse">
+{% elif h.points_avg >= 65 %}
+<span class="badge badge-epic">
+{% elif h.points_avg >= 55 %}
+<span class="badge badge-info">
+{% elif h.points_avg >= 45 %}
+<span class="badge badge-success">
+{% elif h.points_avg >= 35 %}
+<span class="badge badge-warning">
+{% elif h.points_avg <= 0 %}
+<span class="badge">
+{% else %}
+<span class="badge badge-important">
+{% endif %}
+{{h.points_avg}}</span>
+</td>
+	  <td>{{h.win_pct}}</td>
+	  <td><!-- win score --></td>
+	  <td><!-- overall hero score --></td>
+
+
+	</tr>
+	{% endfor %}
+      </tbody>
+    </table>
+    
+    </div>
+  </div>
+  <div class="span3">
+    <div class="well">
+      <ul class="nav nav-pills nav-stacked">
+	<li><a href="{{url_for('player', name=player_name)}}">Matches</a></li>
+	<li class="active"><a href="#">Heroes</a></li>
+	<li class="disabled"><a href="">Records</a></li>
+	<li class="disabled"><a href="">Trends</a></li>
+	<li class="disabled"><a href="">Achievements</a></li>
+	<li class="disabled"><a href="">Friends</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

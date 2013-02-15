@@ -2,6 +2,8 @@ from sqlalchemy import create_engine, ForeignKey
 from sqlalchemy import Column, Date, BigInteger, Boolean, Integer, String, DateTime, Time
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
+
+import string
 import pdb
 
 try:
@@ -12,14 +14,20 @@ except ImportError:
 
 #Base = declarative_base()
 
-# stats we care about
-stats = ["assists", "kills", "deaths",
+all_stats = ["assists", "kills", "deaths",
          "gold_per_min", "hero_healing",
          "xp_per_min",
          "last_hits", "denies",
          "tower_damage", "hero_damage", 
 ]
  
+stats = ["assists", "kills", "deaths",
+         "gold_per_min", "hero_healing",
+         "xp_per_min",
+         "last_hits", "denies",
+         "tower_damage", "hero_damage", 
+]
+
 class Match(Base):
     __tablename__ = 'matches'
     id = Column(BigInteger, primary_key=True)
@@ -151,6 +159,8 @@ class Hero(Base):
         self.name = name
     def __repr__(self):
         return "<Hero('%s', '%s', '%s')>" % (self.id, self.localized_name, self.name)
+    def img_inline(self):
+        return "<img src=\"/static/img/" + string.replace(self.name, "npc_dota_hero_", "") + "_sm.png\" alt=\"" + self.localized_name + "\" title=\"" + self.localized_name + "\" style=\"width:46px; height:26px; display:block;\" />"
 
 class Item(Base):
     __tablename__ = 'items'

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+<div class="row">
 <div class="span9">
 <h2>{{ pagination.info|safe }}</h2>
 <div class="well">
@@ -22,10 +23,10 @@
 <div class="well">
 <ul class="nav nav-pills nav-stacked">
 {% for (name, id) in player_pages %}
-<li><a href="{{url_for('player', id=id)}}">{{name}}</a></li>
+<li><a href="{{url_for('player', name=name)}}">{{name}}</a></li>
 {% endfor %}
 </ul>
 </div>
 </div>
-
+</div>
 {% endblock %}
