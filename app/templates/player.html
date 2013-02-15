@@ -4,10 +4,12 @@
   <div class="span12">
     <h2>{{player_name}}</h2>
   </div>
+  <div class="span12">
+    <h3>{{ pagination.info|safe }}</h3>
+  </div>
 </div>
 <div class="row">
   <div class="span9">
-    <h3>{{ pagination.info|safe }}</h3>
     <div class="well">
       <ul class="nav nav-pills nav-stacked">
 	
@@ -26,12 +28,15 @@
     <div class="well">
       <ul class="nav nav-pills nav-stacked">
 	<li class="active"><a href="#">Matches</a></li>
-	<li><a href="">Heroes</a></li>
-	<li><a href="">Records</a></li>
-	<li><a href="">Trends</a></li>
+	<li><a href="{{url_for('player_heroes', name=player_name)}}">Heroes</a></li>
+	<li class="disabled"><a href="">Records</a></li>
+	<li class="disabled"><a href="">Trends</a></li>
+	<li class="disabled"><a href="">Achievements</a></li>
+	<li class="disabled"><a href="">Friends</a></li>
       </ul>
     </div>
   </div>
+
 </div>
 
 {% endblock %}

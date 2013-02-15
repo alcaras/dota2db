@@ -26,6 +26,7 @@
 </div>
 </th>
 </tr>
+
 <tr>
 <th class="name"></th>         <!-- 01 -->
 <th class="number">kda</th>     <!-- 02 -->
@@ -73,7 +74,7 @@
 
 {{player.points}}</span>
 </td>
-<td class="hero">{{helpers[match.id]["hero"][player.player_slot]|safe}}</td>
+<td class="hero">{{player.hero.img_inline()|safe}}</td>
 <td class="number">{{player.level}}</td>
 <td class="number">{{player.kills}}</td>
 <td class="number">{{player.deaths}}</td>
