@@ -26,8 +26,6 @@
 	  <th class="points">avg. points</th>
 	  <th class="num">win %</th>
 	  <th class="num">win ACI</th>
-	  <th class="num">kda ACI</th>
-	  <th class="num">points ACI</th>
 	</tr>
 	
       </thead>
@@ -61,10 +59,6 @@
 </td>
 	  <td class="num">{{h.win_pct}}</td>
 	  <td class="num">{{h.win_aci}}</td>
-	  <td class="num">{{h.kda_aci}}</td>
-	  <td class="num">{{h.points_aci}}</td>
-
-
 	</tr>
 	{% endfor %}
       </tbody>
@@ -83,21 +77,7 @@
     takes into both how successful a hero has been and the number of
     times it has been played. 
       <p>
-Higher is better. The number itself doesn't matter; the relative
-rankings do.</dd>
-<dt>A note from Alc</dt>
-<dd>ACI is designed for situations like wins and games played. I'm not
-sure how useful it is for KDA and hero points. Let me know what you
-think.
-<p>
-Sorting by your win ACI will likely do a good job
-of showing you the hero you're most likely to win, given your data
-thus far. Whereas hero points are more about how you perform on that
-hero, <i>relative to the people you play with and against</i>. That
-means you may do better than most people on a hero and thus a high
-hero score, but if the hero sucks then you'll still lose quite a bit
-(looking at you, Meepo). Keep this in mind when comparing hero points
-and win ACI.</dd>
+Higher is better.</dd>
     <dt>Technical Details</dt>
 <dd>
 We calculate the lower bound of a 95% confidence
@@ -105,17 +85,24 @@ We calculate the lower bound of a 95% confidence
     number.  For more discussion,
     see <a href="http://stackoverflow.com/questions/3749125/how-should-i-order-these-helpful-scores">this
     stackoverflow question</a>.
-<p>
-<p>
-  For KDA, we do something a bit more intricate. We take the lower bound
-  of the ACI for the sum of kills and assists then divide it by
-  the <i>upper</i> bound of the ACI for the sum of deaths before
-  multiplying by a constant to obtain a prettier number.
-<p>
-For hero points, we take the lower bound of the ACI for sum of hero
-points before
-  multiplying by a constant to obtain a prettier number.
 </dd>
+<dt>Examples</dt>
+<dd>
+For example, a win ACI of 35.0 means that, based on your games played
+on that hero, the lower bound of the 95% confidence interval for your
+win rate for that hero is 35.
+</dd>
+<dt>On the difference between ACI and hero points</dt>
+<dd>
+Sorting by your win ACI will likely do a good job
+of showing you the hero you're most likely to win with based on your
+data so far. In contrast, hero points are more about how you perform on that
+hero, <i>relative to the people you play with and against</i>. That
+means you may do better than most people on a hero and thus garner a high
+hero score, but if the hero sucks then you'll still lose quite a bit
+(looking at you, Meepo). Keep this in mind when comparing hero points
+and win ACI.</dd>
+
 </dl>
 </small>
 </p>
