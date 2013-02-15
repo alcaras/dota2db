@@ -85,7 +85,7 @@ for i, m in enumerate(matches):
     break_me = False
 
     for j, p in enumerate(m.players):
-        if p.leaver_status == 2:
+        if p.leaver_status >= 2: # 3s and 4s are not good
             print "marking", m.id, "as insignificant: ",
             print p.player_slot, "abandoned"
             m.is_significant_p = False

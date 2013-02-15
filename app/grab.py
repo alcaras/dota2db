@@ -234,7 +234,7 @@ def grab_match(id):
     
     # 0 = okay, 1 = left after safe, 2 = abandon, 3 = ?, 4 = ?
     pl["leaver_status"] = p["leaver_status"]
-    if pl["leaver_status"] == 2:
+    if pl["leaver_status"] >= 2:
       abandons += 1
     
 
