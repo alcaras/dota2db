@@ -1,3 +1,8 @@
+th.num,
+td.num {
+    text-align: right;
+}
+
 td.name {
     width : 30%;
     text-align: left;
@@ -13,6 +18,7 @@ td.large_number {
     width: 6%;
 }
 
+th.points,
 td.points {
     text-align: center;
 
@@ -82,3 +88,4 @@ td.dire,
     background-color: #b94a48;
     color: #b94a48;
 }
+

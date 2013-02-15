@@ -11,6 +11,7 @@ from flask import render_template
 from flask import abort
 from flask import request
 
+from agresti_coull import agresti_coull
 
 # forking our own
 from paginate import Pagination
@@ -205,6 +206,9 @@ def player(name, page = 1):
 
 
 
+
+
+
 @app.route('/player/<string:name>/heroes')
 def player_heroes(name):
 
@@ -220,7 +224,8 @@ def player_heroes(name):
                             func.sum(Player.kills).label("kills_sum"),
                             func.sum(Player.deaths).label("deaths_sum"),
                             func.sum(Player.assists).label("assists_sum"),
-                            func.avg(Player.points).label("points_avg"),).\
+                            func.avg(Player.points).label("points_avg"),
+                            func.sum(Player.points).label("points_sum"),).\
                             outerjoin(Player).\
                             outerjoin(Player.match).\
                             filter(Match.is_significant_p == True,
@@ -234,7 +239,8 @@ def player_heroes(name):
                                     stmt.c.kills_sum,
                                     stmt.c.deaths_sum,
                                     stmt.c.assists_sum,
-                                    stmt.c.points_avg).outerjoin(stmt, Hero.id == stmt.c.id).\
+                                    stmt.c.points_avg,
+                                    stmt.c.points_sum).outerjoin(stmt, Hero.id == stmt.c.id).\
                                     order_by(Hero.localized_name).all()
 
 
@@ -261,9 +267,33 @@ def player_heroes(name):
         if h.played == 0:
             kda = "0.0"
 
-        h.__setattr__("win_pct", win_pct)
-            
+
+
+        # arbitrary scaling factor for prettier numbers
+        win_aci = round(agresti_coull(h.played, h.wins)*100,1)
+
+        kda_aci = 0
+#        kda_aci = round(agresti_coull(int(float(kda)*10), h.played), 3)
+
+        if h.played > 0:
+            ka_aci = agresti_coull(h.kills_sum + h.assists_sum, h.played)
+            d_aci = agresti_coull(h.deaths_sum, h.played, upper_bound=True)
+            kda_aci = round((ka_aci/d_aci),1)
+        else:
+            kda_aci = 0
+
+        if h.points_sum is not None:
+            points_aci = round(agresti_coull(h.points_sum, h.played)*100,1)
+        else:
+            points_aci = 0
+
+        # add these to our hero NamedTumple
+
+        h.__setattr__("win_pct", win_pct)            
         h.__setattr__("kda", kda)
+        h.__setattr__("win_aci", win_aci)
+        h.__setattr__("kda_aci", kda_aci)
+        h.__setattr__("points_aci", points_aci)
 
 
     

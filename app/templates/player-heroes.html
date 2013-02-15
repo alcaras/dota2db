@@ -17,15 +17,17 @@
       <thead>
 	<tr>
 	  <th class="unsortable"></th>
+	  <th class="unsortable"></th>
 	  <th>hero</th>
-	  <th>played</th>
-	  <th>wins</th>
-	  <th>kda</th>
+	  <th class="num">played</th>
+	  <th class="num">wins</th>
+	  <th class="num">kda</th>
 	  <!-- possibly kills, deaths, assists, gpm, xpm averages -->
-	  <th>avg. points</th>
-	  <th>win %</th>
-	  <th>win score</th>
-	  <th>overall hero score</th>
+	  <th class="points">avg. points</th>
+	  <th class="num">win %</th>
+	  <th class="num">win ACI</th>
+	  <th class="num">kda ACI</th>
+	  <th class="num">points ACI</th>
 	</tr>
 	
       </thead>
@@ -33,11 +35,12 @@
       <tbody class="list">
 	{% for h in heroes %}
 	<tr>
+	  <td></td>
 	  <td>{{h.Hero.img_inline()|safe}}</td>
 	  <td>{{h.Hero.localized_name}}</td>
-	  <td>{{h.played}}</td>
-	  <td>{{h.wins}}</td>
-	  <td>{{h.kda|safe}}</td>
+	  <td class="num">{{h.played}}</td>
+	  <td class="num">{{h.wins}}</td>
+	  <td class="num">{{h.kda|safe}}</td>
 	  <td class="points">
 {% if h.points_avg >= 80 %}
 <span class="badge badge-inverse">
@@ -56,17 +59,67 @@
 {% endif %}
 {{h.points_avg}}</span>
 </td>
-	  <td>{{h.win_pct}}</td>
-	  <td><!-- win score --></td>
-	  <td><!-- overall hero score --></td>
+	  <td class="num">{{h.win_pct}}</td>
+	  <td class="num">{{h.win_aci}}</td>
+	  <td class="num">{{h.kda_aci}}</td>
+	  <td class="num">{{h.points_aci}}</td>
 
 
 	</tr>
 	{% endfor %}
       </tbody>
     </table>
-    
+   
     </div>
+    <div class="well">
+<p>
+      <small>
+    <dl>
+    <dt>
+    ACI
+    </dt>
+    <dd>The <A href="http://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Agresti-Coull_Interval">Agresti-Coull
+    interval</a>. We use the ACI to generate a single number that
+    takes into both how successful a hero has been and the number of
+    times it has been played. 
+      <p>
+Higher is better. The number itself doesn't matter; the relative
+rankings do.</dd>
+<dt>A note from Alc</dt>
+<dd>ACI is designed for situations like wins and games played. I'm not
+sure how useful it is for KDA and hero points. Let me know what you
+think.
+<p>
+Sorting by your win ACI will likely do a good job
+of showing you the hero you're most likely to win, given your data
+thus far. Whereas hero points are more about how you perform on that
+hero, <i>relative to the people you play with and against</i>. That
+means you may do better than most people on a hero and thus a high
+hero score, but if the hero sucks then you'll still lose quite a bit
+(looking at you, Meepo). Keep this in mind when comparing hero points
+and win ACI.</dd>
+    <dt>Technical Details</dt>
+<dd>
+We calculate the lower bound of a 95% confidence
+    interval, then multiply by a constant for a prettier
+    number.  For more discussion,
+    see <a href="http://stackoverflow.com/questions/3749125/how-should-i-order-these-helpful-scores">this
+    stackoverflow question</a>.
+<p>
+<p>
+  For KDA, we do something a bit more intricate. We take the lower bound
+  of the ACI for the sum of kills and assists then divide it by
+  the <i>upper</i> bound of the ACI for the sum of deaths before
+  multiplying by a constant to obtain a prettier number.
+<p>
+For hero points, we take the lower bound of the ACI for sum of hero
+points before
+  multiplying by a constant to obtain a prettier number.
+</dd>
+</dl>
+</small>
+</p>
+      </div>
   </div>
   <div class="span3">
     <div class="well">
