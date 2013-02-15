@@ -98,7 +98,6 @@ def matches_and_players(matches):
     return (matches, players_for_match, helpers)
     
 
-
 @app.route('/')
 @app.route('/index')
 @app.route('/index/<int:page>')
@@ -215,26 +214,36 @@ def player_heroes(name):
     else:
         abort(404)
 
-    heroes_query = db.session.query(Hero,
-                                    func.count(Player.account_id).label("played"),
-                                    func.sum(Player.win > 0, type_=Integer).label("wins"),
-                                    func.sum(Player.kills).label("kills_sum"),
-                                    func.sum(Player.deaths).label("deaths_sum"),
-                                    func.sum(Player.assists).label("assists_sum"),
-                                    func.avg(Player.points).label("points_avg"),).\
-                                    outerjoin(Player).\
-                                    outerjoin(Player.match).\
-                                    filter(or_(and_(Player.account_id == player_id,
-                                                    Match.is_significant_p == True),
-                                               and_(Player.account_id == None,
-                                                    Match.is_significant_p == None))).\
-                                    group_by(Hero.id).\
-                                    order_by(Hero.localized_name).\
-                                    all()
+    stmt = db.session.query(Hero,
+                            func.count(Player.account_id).label("played"),
+                            func.sum(Player.win > 0, type_=Integer).label("wins"),
+                            func.sum(Player.kills).label("kills_sum"),
+                            func.sum(Player.deaths).label("deaths_sum"),
+                            func.sum(Player.assists).label("assists_sum"),
+                            func.avg(Player.points).label("points_avg"),).\
+                            outerjoin(Player).\
+                            outerjoin(Player.match).\
+                            filter(Match.is_significant_p == True,
+                                   Player.account_id == player_id).\
+                                   group_by(Hero.id).\
+                                   order_by(Hero.localized_name).\
+                                   subquery()
+
+    heroes_query = db.session.query(Hero, stmt.c.played,
+                                    stmt.c.wins,
+                                    stmt.c.kills_sum,
+                                    stmt.c.deaths_sum,
+                                    stmt.c.assists_sum,
+                                    stmt.c.points_avg).outerjoin(stmt, Hero.id == stmt.c.id).\
+                                    order_by(Hero.localized_name).all()
+
 
     for h in heroes_query:
         if h.wins is None:
             h.wins = 0
+
+        if h.played is None:
+            h.played = 0
 
         if h.played > 0:
             win_pct = (round(float(h.wins)/h.played*100,1))
