@@ -29,6 +29,11 @@ td.victory {
 
 }
 
+td.team,
+th.team {
+    width: 10px;
+}
+
 th.name {
     width : 30%;
     text-align: left;
@@ -41,7 +46,7 @@ th.number {
 
 th.large_number {
     text-align: right;
-    width: 6%;
+    width: 5%;
 }
 
 th.points {
@@ -66,22 +71,14 @@ th.victory {
   background-color: #000000;
 }
 
-.table-striped tbody > tr.dire:nth-child(odd) > td,
-.table-striped tbody > tr.dire:nth-child(odd) > th {
-  background-color: #f9e9e9;
+td.radiant,
+.table-striped tbody > tr:nth-child(odd) > td.radiant {
+    background-color: #468847;
+    color: #468847;
 }
 
-.table-striped tbody > tr.dire:nth-child(even) > td,
-.table-striped tbody > tr.dire:nth-child(even) > th {
-  background-color: #f5e5e5;
-}
-
-.table-striped tbody > tr.radiant:nth-child(odd) > td,
-.table-striped tbody > tr.radiant:nth-child(odd) > th {
-  background-color: #e9f9e9;
-}
-
-.table-striped tbody > tr.radiant:nth-child(even) > td,
-.table-striped tbody > tr.radiant:nth-child(even) > th {
-  background-color: #e5f5e5;
+td.dire,
+.table-striped tbody > tr:nth-child(odd) > td.dire {
+    background-color: #b94a48;
+    color: #b94a48;
 }
