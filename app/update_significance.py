@@ -36,6 +36,7 @@ from models import *
 from db import session
 
 from nhp import calculateHeroPoints
+from constants import *
 
 import sys
 
@@ -50,6 +51,28 @@ for i, m in enumerate(matches):
     if i % (len(matches)/20) == 0:
         print i+1, "/", len(matches)
 
+
+    valid_modes = [0, 1, 2, 3, 4, 5, 12] # 0 is valid for legacy reasons
+    if m.game_mode not in valid_modes:
+        print "marking", m.id, "as insignificant: ",
+        print "not a valid a game mode", m.game_mode,
+        if m.game_mode in GAME_MODES:
+            print GAME_MODES[m.game_mode]
+        else:
+            print "Unknown Game Mode"
+        m.is_significant_p = False
+        flagged += 1
+        continue
+
+        
+
+
+    if m.human_players < 10:
+        print "marking", m.id, "as insignificant: ",
+        print "insufficient number of human players (", m.human_players, ")"
+        m.is_significant_p = False
+        flagged += 1
+        continue
 
 
     if m.human_players < 10:

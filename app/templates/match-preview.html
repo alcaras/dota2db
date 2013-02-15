@@ -4,10 +4,10 @@
 <th colspan=2>
 {{ momentjs(match.starttime).calendar() }}
 </th>
-<th colspan=1>
+<th colspan=2>
 {{ helpers[match.id]["mode"] }}
 </th>
-<th colspan=3>
+<th colspan=2>
 {{ helpers[match.id]["cluster"] }}
 </th>
 <th colspan=2>
@@ -20,7 +20,7 @@
 {% endif %}
 </div>
 </th>
-<th colspan=3>
+<th colspan=4>
 <div align="right">
 <a href="{{ url_for('match', id = match.id) }}">Match {{match.id}}</a>
 </div>

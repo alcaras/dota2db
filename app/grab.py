@@ -259,6 +259,10 @@ def grab_match(id):
   
   new_match.is_significant_p = True
 
+  valid_modes = [0, 1, 2, 3, 4, 5, 12] # 0 is valid for legacy reasons
+  if new_match.game_mode not in valid_modes:
+    new_match.is_significant_p = False
+
   if new_match.human_players < 10:
     new_match.is_significant_p = False
 
