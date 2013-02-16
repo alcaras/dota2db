@@ -22,6 +22,14 @@ version_date = parser.parse(data)
 f.close()
 app.jinja_env.globals['VERSION_DATE'] = version_date
 
+# pull in git describe
+f = open('app/version-describe.txt', 'r')
+data = f.read()
+version_describe = data
+f.close()
+app.jinja_env.globals['VERSION_DESCRIBE'] = version_describe
+
+
 print data
 print version_date
 
