@@ -5,6 +5,7 @@ from dateutil import parser
 
 import time
 from flask import g
+import string
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -25,13 +26,10 @@ app.jinja_env.globals['VERSION_DATE'] = version_date
 # pull in git describe
 f = open('app/version-describe.txt', 'r')
 data = f.read()
-version_describe = data
+version_describe = string.replace(string.replace(data, '\n', ''), '\r', '')
 f.close()
 app.jinja_env.globals['VERSION_DESCRIBE'] = version_describe
 
-
-print data
-print version_date
 
 
 db = SQLAlchemy(app)

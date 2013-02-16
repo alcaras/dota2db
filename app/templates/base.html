@@ -32,10 +32,12 @@
       <div class="row">
 	<div class="span12">
 	  <div class="well">
+	    <small>
 	    Part
 	    of <a href="http://subcreation.net/">Subcreation</a>.
-	    <br/>
-	    Version {{VERSION_DESCRIBE}}, build {{VERSION}}, built {{ momentjs(VERSION_DATE).fromNow() }}.
+	    Version {{VERSION_DESCRIBE}}-{{
+	    momentjs(VERSION_DATE).format("YYYY/MM/DD@HH:MM:SS")}} (build {{VERSION}}).
+	    </small>
 	  </div>
 	</div>
       </div>
