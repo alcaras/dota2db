@@ -1,6 +1,7 @@
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 
+from dateutil import parser
 
 import time
 from flask import g
@@ -13,6 +14,16 @@ app.jinja_env.globals['momentjs'] = momentjs
 
 from version import version
 app.jinja_env.globals['VERSION'] = version
+
+# need to pull in the date from the file and put it in a global variable
+f = open('app/version-date.txt', 'r')
+data = f.read()
+version_date = parser.parse(data)
+f.close()
+app.jinja_env.globals['VERSION_DATE'] = version_date
+
+print data
+print version_date
 
 
 db = SQLAlchemy(app)
