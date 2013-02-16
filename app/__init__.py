@@ -15,7 +15,6 @@ from version import version
 app.jinja_env.globals['VERSION'] = version
 
 
-
 db = SQLAlchemy(app)
 
 from app import views, models
