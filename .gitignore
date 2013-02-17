@@ -9,6 +9,8 @@
 *.bat
 *.py[cod]
 
+*.xlsx
+
 # C extensions
 *.so
 
