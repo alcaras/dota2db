@@ -50,7 +50,7 @@ api_key.py
 downloads/
 
 # don't include our scratch files
-scratch-*
+scratch_*
 
 
 
