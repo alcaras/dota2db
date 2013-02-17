@@ -26,24 +26,15 @@ ANONYMOUS_ID = "4294967295"
 # last_hits, denies, xpm,
 # hero_damage, tower_damage, hero_healing
 
-# scores range from .. -3*10 +1 to 5*10+5
-# that is, -29 to +55
-# a solid score is an 12 ... 10*1 + 2
-
-# scores range from -3*28+1 to 5*28+5
-# that is, -53 to 185
 # we can shift and scale
+# our lowest score is -3*5+1 (-14)
+# our high score is 5*5+5 (30)
 
-stat_weights = {"kills" : 5,
-                "deaths" : 5,
-                "assists" : 5,
-                "gold_per_min" : 3,
-                "xp_per_min" : 3,
-                "last_hits" : 2,
-                "denies" : 2,
-                "hero_damage" : 1,
-                "tower_damage" : 1,
-                "hero_healing" : 1, }
+stat_weights = {"kills" : 1,
+                "deaths" : 1,
+                "assists" : 1,
+                "gold_per_min" : 1,
+                "xp_per_min" : 1}
 
 from models import *
 from db import session
@@ -118,8 +109,13 @@ def calculateHeroPoints(p, duration=None):
             score += 2 # bonus for holding out so long
 
     # scale
-    scaled_score = (score + 3*28-1) # add base
-    scaled_score = float(scaled_score) / 228.0 * 100
+    
+
+
+            
+    scaled_score = (score - (-14)) # subtract the lowest possible score
+    # divide by our score range
+    scaled_score = float(scaled_score) / 44 * 100
     scaled_score = round(scaled_score, 0)
     
     

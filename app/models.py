@@ -21,11 +21,9 @@ all_stats = ["assists", "kills", "deaths",
          "tower_damage", "hero_damage", 
 ]
  
+# stats we care about
 stats = ["assists", "kills", "deaths",
-         "gold_per_min", "hero_healing",
-         "xp_per_min",
-         "last_hits", "denies",
-         "tower_damage", "hero_damage", 
+         "gold_per_min", "xp_per_min",
 ]
 
 class Match(Base):
