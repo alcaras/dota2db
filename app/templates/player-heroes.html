@@ -25,7 +25,7 @@
 	  <!-- possibly kills, deaths, assists, gpm, xpm averages -->
 	  <th class="points">avg. points</th>
 	  <th class="num">win %</th>
-	  <th class="num">win ACI</th>
+	  <th class="num">win WSI</th>
 	</tr>
 	
       </thead>
@@ -58,7 +58,7 @@
 {{h.points_avg}}</span>
 </td>
 	  <td class="num">{{h.win_pct}}</td>
-	  <td class="num">{{h.win_aci}}</td>
+	  <td class="num">{{h.win_wilson}}</td>
 	</tr>
 	{% endfor %}
       </tbody>
@@ -70,38 +70,30 @@
       <small>
     <dl>
     <dt>
-    ACI
+    What is win WSI?
     </dt>
-    <dd>The <A href="http://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Agresti-Coull_Interval">Agresti-Coull
-    interval</a>. We use the ACI to generate a single number that
+    <dd>The WSI stands for <A href="http://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval">Wilson
+    score interval</a>. We
+    use the WSI to generate a single number that
     takes into both how successful a hero has been and the number of
     times it has been played. 
       <p>
 Higher is better.</dd>
     <dt>Technical Details</dt>
 <dd>
-We calculate the lower bound of a 95% confidence
-    interval, then multiply by a constant for a prettier
-    number.  For more discussion,
-    see <a href="http://stackoverflow.com/questions/3749125/how-should-i-order-these-helpful-scores">this
-    stackoverflow question</a>.
+ See this <a href="http://www.evanmiller.org/how-not-to-sort-by-average-rating.html">blog post</a>.
 </dd>
-<dt>Examples</dt>
+
+<dt>On the difference between WSI and hero points</dt>
 <dd>
-For example, a win ACI of 35.0 means that, based on your games played
-on that hero, the lower bound of the 95% confidence interval for your
-win rate for that hero is 35%.
-</dd>
-<dt>On the difference between ACI and hero points</dt>
-<dd>
-Sorting by your win ACI will likely do a good job
+Sorting by your win WSI will likely do a good job
 of showing you the hero you're most likely to win with based on your
 data so far. In contrast, hero points are more about how you perform on that
 hero, <i>relative to the people you play with and against</i>. That
 means you may do better than most people on a hero and thus garner a high
 hero score, but if the hero sucks then you'll still lose quite a bit
 (looking at you, Meepo). Keep this in mind when comparing hero points
-and win ACI.</dd>
+and win WSI.</dd>
 
 </dl>
 </small>

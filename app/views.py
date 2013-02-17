@@ -11,7 +11,7 @@ from flask import render_template
 from flask import abort
 from flask import request
 
-from agresti_coull import agresti_coull
+from wilson import wilson
 
 # forking our own
 from paginate import Pagination
@@ -268,13 +268,12 @@ def player_heroes(name):
 
 
         # arbitrary scaling factor for prettier numbers
-        win_aci = round(agresti_coull(h.played, h.wins)*100,1)
-
+        win_wilson = round(wilson(h.played, h.wins)*100,1)
 
 
         h.__setattr__("win_pct", win_pct)            
         h.__setattr__("kda", kda)
-        h.__setattr__("win_aci", win_aci)
+        h.__setattr__("win_wilson", win_wilson)
 
 
 

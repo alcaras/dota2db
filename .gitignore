@@ -49,5 +49,8 @@ api_key.py
 # don't include our downloads directory
 downloads/
 
+# don't include our scratch files
+scratch-*
+
 
 
