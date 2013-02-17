@@ -17,14 +17,14 @@ from version import version
 app.jinja_env.globals['VERSION'] = version
 
 # need to pull in the date from the file and put it in a global variable
-f = open('app/version-date.txt', 'r')
+f = open('/home/dominik/dota/app/version-date.txt', 'r')
 data = f.read()
 version_date = parser.parse(data)
 f.close()
 app.jinja_env.globals['VERSION_DATE'] = version_date
 
 # pull in git describe
-f = open('app/version-describe.txt', 'r')
+f = open('/home/dominik/dota/app/version-describe.txt', 'r')
 data = f.read()
 version_describe = string.replace(string.replace(data, '\n', ''), '\r', '')
 f.close()
