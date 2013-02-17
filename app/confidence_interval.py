@@ -2,6 +2,8 @@ import numpy
 import pdb
 from math import sqrt
 
+import sys
+
 # return a 95% confidence interval [a to b]
 # given a distribution
 
@@ -44,6 +46,8 @@ def confidence_interval(distribution):
     avg = numpy.average(distribution)
     std = numpy.std(distribution)
     n = len(distribution)
+
+    print >> sys.stderr, "debugging ci: ", distribution
 
     if n >= 30:
         # if we have 30 or more samples, we assume a normal distribution
