@@ -104,7 +104,7 @@ def matches_and_players(matches):
 @app.route('/index')
 @app.route('/index/<int:page>')
 def index(page = 1):
-    matches_query = Match.query.order_by(Match.starttime.desc())
+    matches_query = Match.query.filter(Match.is_significant_p==True).order_by(Match.starttime.desc())
     display_msg = '''Matches <b>{start} - {end}</b> of 
 <b>{total}</b>'''
     matches_pagination = Pagination(page=page, per_page = MATCHES_PER_PAGE,
@@ -135,40 +135,6 @@ def match(id):
     return render_template("match.html", match = match,
                            players_for_match=players_for_match, helpers=helpers)
 
-@app.route('/player/<string:name>')
-@app.route('/player/<string:name>/page/<int:page>')
-def player(name, page = 1):
-
-    if str(name) in NAME_ID.keys():
-        player_name = name
-        player_id = NAME_ID[str(name)]
-    else:
-        abort(404)
-
-
-    matches_query = Match.query.join(Player).\
-        filter(Player.account_id==player_id).\
-        order_by(Match.starttime.desc())
-    display_msg = '''Matches <b>{start} - {end}</b> of <b>{total}</b>'''
-    matches_pagination = Pagination(per_page = MATCHES_PER_PAGE,
-                                    total=matches_query.count(),
-                                    display_msg = display_msg,
-                                    page = page)
-    matches_query = matches_query.paginate(page, MATCHES_PER_PAGE, False)
-
-    (matches, players_for_match, helpers) = matches_and_players(matches_query.items)
-
-
-
-
-    return render_template("player.html", matches = matches_query,
-                           pagination = matches_pagination,
-                           players_for_match = players_for_match,
-                           helpers = helpers,
-                           player_name = player_name)
-
-
-
 
 
 @app.route('/player/<string:name>')
@@ -183,7 +149,8 @@ def player(name, page = 1):
 
 
     matches_query = Match.query.join(Player).\
-        filter(Player.account_id==player_id).\
+        filter(Player.account_id==player_id,
+               Match.is_significant_p==True).\
         order_by(Match.starttime.desc())
     display_msg = '''Matches <b>{start} - {end}</b> of <b>{total}</b>'''
     matches_pagination = Pagination(per_page = MATCHES_PER_PAGE,
