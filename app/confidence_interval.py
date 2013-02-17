@@ -39,7 +39,7 @@ def confidence_interval(distribution):
     ppf[28] = 2.0484
     ppf[29] = 2.0452
     ppf[30] = 2.0422
-    
+    # end of dirty hack
 
     avg = numpy.average(distribution)
     std = numpy.std(distribution)
@@ -53,7 +53,10 @@ def confidence_interval(distribution):
         # here we use a student's t distribution
         x = 0.025 # 95% confidence interval
         df = n-1
-        z = abs(ppf[df])
+        if df not in ppf:
+            z = 1.96
+        else:
+            z = abs(ppf[df])
         
     else:
         return None # can't say anything with a sample size of 0 or 1
