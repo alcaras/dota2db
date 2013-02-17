@@ -5,13 +5,13 @@
 {{ momentjs(match.starttime).calendar() }}
 </th>
 <th colspan=2>
-{{ helpers[match.id]["mode"] }}
+{{ match.mode_name }}
 </th>
 <th colspan=2>
-{{ helpers[match.id]["cluster"] }}
+{{ match.cluster_name }}
 </th>
 <th colspan=2>
-{{ helpers[match.id]["duration"] }}
+{{ match.duration_pretty }}
 </th>
 <th colspan=3>
 <div align="center">
@@ -58,13 +58,13 @@
 </td>
 
 <td class="name">
-{% if helpers[match.id]["p"][player.player_slot] != "" %}
-<a href="{{url_for('player',  name=helpers[match.id]["p"][player.player_slot])}}">
-{{helpers[match.id]["p"][player.player_slot]}}
+{% if player.player_name != "" %}
+<a href="{{url_for('player',  name=player.player_name)}}">
+{{player.player_name}}
 </a>
 {% endif %}
 </td>
-<td class="number">{{ helpers[match.id]["kda"][player.player_slot]|safe }}</td>
+<td class="number">{{ player.kda|safe }}</td>
 <td class="points">
   {% import 'hero-points.html' as hero %}
   {{ hero.points(player.points) }}
@@ -76,7 +76,7 @@
 <td class="number">{{player.assists}}</td>
 <td class="large_number">{{player.last_hits}}</td>
 <td class="number">{{player.denies}}</td>
-<td class="large_number">{{ helpers[match.id]["lh/m"][player.player_slot]|safe }}</td>
+<td class="large_number">{{ player.lhpm|safe }}</td>
 <td class="large_number">{{player.gold_per_min}}</td>
 <td class="large_number">{{player.xp_per_min}}</td>
 <td class="victory">

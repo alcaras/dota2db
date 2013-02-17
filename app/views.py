@@ -42,49 +42,44 @@ def matches_and_players(matches):
 
     players = Player.query.filter(Player.match_id.in_(match_ids)).all()
 
-    helpers = {}
-
     players_for_match = {}
     for match in matches:
         m = match.id
         players_for_match[m] = []
-        helpers[m] = {}
-        helpers[m]["p"] = {}
-        helpers[m]["kda"] = {}
-        helpers[m]["lh/m"] = {}
 
         if match.game_mode in GAME_MODES:
-            helpers[m]["mode"] = GAME_MODES[match.game_mode]
+            match.__setattr__("mode_name", GAME_MODES[match.game_mode])
         else:
-            helpers[m]["mode"] = "Game Mode " + str(match.game_mode)
+            match.__setattr__("mode_name", "Game Mode " + str(match.game_mode))
 
         if match.cluster in CLUSTERS:
-            helpers[m]["cluster"] = CLUSTERS[match.cluster]
+            match.__setattr__("cluster_name", CLUSTERS[match.cluster])
         else:
-            helpers[m]["cluster"] = "Cluster " + str(match.cluster)
+            match.__setattr__("cluster_name", "Cluster " + str(match.cluster))
 
-        helpers[m]["duration"] = str(datetime.timedelta(seconds=int(match.duration)))
+        
+        match.__setattr__("duration_pretty", str(datetime.timedelta(seconds=int(match.duration))))
 
         for p in players:
             if p.match_id == m:
                 players_for_match[m] += [p]
                 if p.account_id in NAME_ID.values():
-                    helpers[m]["p"][p.player_slot] = ID_NAME[p.account_id]
+                    p.__setattr__("player_name", ID_NAME[p.account_id])            
                 else:
-                    helpers[m]["p"][p.player_slot] = ''
+                    p.__setattr__("player_name", "")
+
                 if p.deaths > 0:
-                    helpers[m]["kda"][p.player_slot] = (str(round(float(p.kills + p.assists) /
-                                                                  (p.deaths), 1)))
+                    p.__setattr__("kda", (str(round(float(p.kills + p.assists) /
+                                                                  (p.deaths), 1))))
                 else:
-                    helpers[m]["kda"][p.player_slot] = '&infin;'
+                    p.__setattr__("kda", "&infin;")
                 
                 if match.duration/60 != 0:
-                    helpers[m]["lh/m"][p.player_slot] = (str(round(float(p.last_hits) /
-                                                                   float(match.duration/60),1)))
+                    p.__setattr__("lhpm", (str(round(float(p.last_hits) /
+                                                                   float(match.duration/60),1))))
                 else:
-                     helpers[m]["lh/m"][p.player_slot] = '&infin;'
+                    p.__setattr__("lhpm", "&infin;")
 
-                # 47x26                
 
 
 
@@ -97,7 +92,7 @@ def matches_and_players(matches):
 
     
 
-    return (matches, players_for_match, helpers)
+    return (matches, players_for_match)
     
 
 @app.route('/')
@@ -111,7 +106,7 @@ def index(page = 1):
                                     total=matches_query.count(), display_msg = display_msg)
     matches_query = matches_query.paginate(page, MATCHES_PER_PAGE, False)
 
-    (matches, players_for_match, helpers) = matches_and_players(matches_query.items)
+    (matches, players_for_match) = matches_and_players(matches_query.items)
 
 
     sorted_players = sorted(NAME_ID.iteritems(),
@@ -122,7 +117,6 @@ def index(page = 1):
     return render_template("index.html", matches = matches_query,
                            pagination = matches_pagination,
                            players_for_match = players_for_match,
-                           helpers = helpers,
                            player_pages = sorted_players)
 
 @app.route('/match/<int:id>')
@@ -130,10 +124,10 @@ def match(id):
     match = Match.query.filter(Match.id == id).first()
     matches_query = [match]
 
-    (matches, players_for_match, helpers) = matches_and_players(matches_query)
+    (matches, players_for_match) = matches_and_players(matches_query)
     
     return render_template("match.html", match = match,
-                           players_for_match=players_for_match, helpers=helpers)
+                           players_for_match=players_for_match)
 
 
 
@@ -159,7 +153,7 @@ def player(name, page = 1):
                                     page = page)
     matches_query = matches_query.paginate(page, MATCHES_PER_PAGE, False)
 
-    (matches, players_for_match, helpers) = matches_and_players(matches_query.items)
+    (matches, players_for_match) = matches_and_players(matches_query.items)
 
 
 
@@ -167,7 +161,6 @@ def player(name, page = 1):
     return render_template("player.html", matches = matches_query,
                            pagination = matches_pagination,
                            players_for_match = players_for_match,
-                           helpers = helpers,
                            player_name = player_name)
 
 
