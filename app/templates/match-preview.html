@@ -66,23 +66,8 @@
 </td>
 <td class="number">{{ helpers[match.id]["kda"][player.player_slot]|safe }}</td>
 <td class="points">
-{% if player.points >= 80 %}
-<span class="badge badge-inverse">
-{% elif player.points >= 65 %}
-<span class="badge badge-epic">
-{% elif player.points >= 55 %}
-<span class="badge badge-info">
-{% elif player.points >= 45 %}
-<span class="badge badge-success">
-{% elif player.points >= 35 %}
-<span class="badge badge-warning">
-{% elif player.points == -100 %}
-<span class="badge">
-{% else %}
-<span class="badge badge-important">
-{% endif %}
-
-{{player.points}}</span>
+  {% import 'hero-points.html' as hero %}
+  {{ hero.points(player.points) }}
 </td>
 <td class="hero">{{player.hero.img_inline()|safe}}</td>
 <td class="number">{{player.level}}</td>

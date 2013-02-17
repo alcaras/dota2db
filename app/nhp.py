@@ -36,6 +36,8 @@ stat_weights = {"kills" : 1,
                 "gold_per_min" : 1,
                 "xp_per_min" : 1}
 
+stats_to_per_min = {"kills", "deaths", "assists"}
+
 from models import *
 from db import session
 
@@ -74,8 +76,22 @@ def calculateHeroPoints(p, duration=None):
 #       -2o    -1o     x    +1o    +2o        standard deviations from average
 #   -3      -1      0     1      3      5     points for falling into a range
 
+
     for s in stats:
         k = p.__dict__[s]
+
+        if duration == None:
+            dis = p.match.duration
+        else:
+            dis = duration
+
+        dim = int(dis/60)
+
+        if s in stats_to_per_min: # we need to divide by duration
+            if dim == 0:
+                k = 0 # can't divide by 0
+            else:
+                k = k / dim
 
         bonus = 0
 
@@ -94,11 +110,6 @@ def calculateHeroPoints(p, duration=None):
 
         score += stat_weights[s] * bonus
 
-        if duration == None:
-            dis = p.match.duration
-        else:
-            dis = duration
-
         if dis <= (20*60) and (p.win==1):
             score += 5  # stomp bonus
         if dis > (20*60) and (p.win==1):
@@ -115,7 +126,7 @@ def calculateHeroPoints(p, duration=None):
             
     scaled_score = (score - (-14)) # subtract the lowest possible score
     # divide by our score range
-    scaled_score = float(scaled_score) / 44 * 100
+    scaled_score = float(scaled_score) / 44 * 101 # range over 0-100
     scaled_score = round(scaled_score, 0)
     
     

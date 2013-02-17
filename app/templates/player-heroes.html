@@ -42,42 +42,15 @@
 	  <td class="num">{{h.win_pct}}</td>
 	  <td class="num">{{h.win_wilson}}</td>
 	  <td class="num">{{h.kda|safe}}</td>
+
+	  {% import 'hero-points.html' as hero %}
+
 	  <td class="points">
-{% if h.points_avg >= 80 %}
-<span class="badge badge-inverse">
-{% elif h.points_avg >= 65 %}
-<span class="badge badge-epic">
-{% elif h.points_avg >= 55 %}
-<span class="badge badge-info">
-{% elif h.points_avg >= 45 %}
-<span class="badge badge-success">
-{% elif h.points_avg >= 35 %}
-<span class="badge badge-warning">
-{% elif h.points_avg <= 0 %}
-<span class="badge">
-{% else %}
-<span class="badge badge-important">
-{% endif %}
-{{h.points_avg}}</span>
-</td>
-	  	  <td class="points">
-{% if h.points_lb_ci >= 80 %}
-<span class="badge badge-inverse">
-{% elif h.points_lb_ci >= 65 %}
-<span class="badge badge-epic">
-{% elif h.points_lb_ci >= 55 %}
-<span class="badge badge-info">
-{% elif h.points_lb_ci >= 45 %}
-<span class="badge badge-success">
-{% elif h.points_lb_ci >= 35 %}
-<span class="badge badge-warning">
-{% elif h.points_lb_ci <= 0 %}
-<span class="badge">
-{% else %}
-<span class="badge badge-important">
-{% endif %}
-{{h.points_lb_ci}}</span>
-</td>
+	    {{ hero.points(h.points_avg) }}
+	  </td>
+	  <td class="points">
+	    {{ hero.points(h.points_lb_ci) }}
+	  </td>
 
 	</tr>
 	{% endfor %}
