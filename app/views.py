@@ -259,7 +259,8 @@ def player_heroes(name):
         # arbitrary scaling factor for prettier numbers
         win_wilson = round(wilson(h.played, h.wins)*100,1)
 
-        ci = confidence_interval(hpd[h.Hero.id])
+#        ci = confidence_interval(hpd[h.Hero.id])
+        ci = None
 
         points_lb_ci = 0.0  
 
