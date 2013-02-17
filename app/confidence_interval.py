@@ -43,11 +43,12 @@ def confidence_interval(distribution):
     ppf[30] = 2.0422
     # end of dirty hack
 
+    if distribution == []:
+        return None
+
     avg = numpy.average(distribution)
     std = numpy.std(distribution)
     n = len(distribution)
-
-    print >> sys.stderr, "debugging ci: ", distribution
 
     if n >= 30:
         # if we have 30 or more samples, we assume a normal distribution
