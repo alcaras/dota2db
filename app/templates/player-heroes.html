@@ -21,11 +21,12 @@
 	  <th>hero</th>
 	  <th class="num">played</th>
 	  <th class="num">wins</th>
+	  <th class="num">win %</th>
+	  <th class="num">win WSI</th>
 	  <th class="num">kda</th>
 	  <!-- possibly kills, deaths, assists, gpm, xpm averages -->
 	  <th class="points">avg. points</th>
-	  <th class="num">win %</th>
-	  <th class="num">win WSI</th>
+	  <th class="points">lb_ci points</th>
 	</tr>
 	
       </thead>
@@ -38,6 +39,8 @@
 	  <td>{{h.Hero.localized_name}}</td>
 	  <td class="num">{{h.played}}</td>
 	  <td class="num">{{h.wins}}</td>
+	  <td class="num">{{h.win_pct}}</td>
+	  <td class="num">{{h.win_wilson}}</td>
 	  <td class="num">{{h.kda|safe}}</td>
 	  <td class="points">
 {% if h.points_avg >= 80 %}
@@ -57,8 +60,25 @@
 {% endif %}
 {{h.points_avg}}</span>
 </td>
-	  <td class="num">{{h.win_pct}}</td>
-	  <td class="num">{{h.win_wilson}}</td>
+	  	  <td class="points">
+{% if h.points_lb_ci >= 80 %}
+<span class="badge badge-inverse">
+{% elif h.points_lb_ci >= 65 %}
+<span class="badge badge-epic">
+{% elif h.points_lb_ci >= 55 %}
+<span class="badge badge-info">
+{% elif h.points_lb_ci >= 45 %}
+<span class="badge badge-success">
+{% elif h.points_lb_ci >= 35 %}
+<span class="badge badge-warning">
+{% elif h.points_lb_ci <= 0 %}
+<span class="badge">
+{% else %}
+<span class="badge badge-important">
+{% endif %}
+{{h.points_lb_ci}}</span>
+</td>
+
 	</tr>
 	{% endfor %}
       </tbody>
@@ -69,6 +89,18 @@
 <p>
       <small>
     <dl>
+
+<dt>
+What are lb_ci points?
+<dd>
+lb_ci stands for the lower bound of a 95% confidence
+interval. This is useful to take into account both how well you've
+played a hero and the number of times you've played. Technically,
+we're 95% confident that your true hero points average for that hero
+will be at least the lb_ci points. For more details on how
+confidence intervals work, see
+the <a href="http://en.wikipedia.org/wiki/Confidence_interval">Wikipedia article</a>.
+</dd> 
     <dt>
     What is win WSI?
     </dt>

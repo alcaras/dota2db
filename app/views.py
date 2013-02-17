@@ -12,6 +12,7 @@ from flask import abort
 from flask import request
 
 from wilson import wilson
+from confidence_interval import confidence_interval
 
 # forking our own
 from paginate import Pagination
@@ -241,8 +242,28 @@ def player_heroes(name):
                                     stmt.c.points_avg).outerjoin(stmt, Hero.id == stmt.c.id).\
                                     order_by(Hero.localized_name).all()
 
+    # we also need to pull the entire points distribution...
+    heroes_points = db.session.query(Player.points,
+                                     Hero).\
+                                     join(Player.match).\
+                                     join(Hero).\
+                                     filter(Match.is_significant_p==True,
+                                            Player.account_id==player_id).\
+                                            all()
+
+    # hero point distributions
+    hpd = {}
+       
+    for hp in heroes_points:
+        if hp.Hero.id not in hpd:
+            hpd[hp.Hero.id] = []
+        hpd[hp.Hero.id] += [hp.points]
+
 
     for h in heroes_query:
+        if h.Hero.id not in hpd:
+            hpd[h.Hero.id] = []
+
         if h.wins is None:
             h.wins = 0
 
@@ -267,13 +288,24 @@ def player_heroes(name):
 
 
 
+
         # arbitrary scaling factor for prettier numbers
         win_wilson = round(wilson(h.played, h.wins)*100,1)
 
+        ci = confidence_interval(hpd[h.Hero.id])
+
+        points_lb_ci = 0.0  
+
+        if ci != None:
+            points_lb_ci = round(ci[0],1)
+        
+        if points_lb_ci < 0:
+            points_lb_ci = 0.0
 
         h.__setattr__("win_pct", win_pct)            
         h.__setattr__("kda", kda)
         h.__setattr__("win_wilson", win_wilson)
+        h.__setattr__("points_lb_ci", points_lb_ci)
 
 
 
