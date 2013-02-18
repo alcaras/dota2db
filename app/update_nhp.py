@@ -102,8 +102,12 @@ def analyze_player_performances(players):
 
             
     for s in stats:
-        avg[s] = numpy.average(data[s])
-        std[s] = numpy.std(data[s])
+        if len(data[s]) > 0:
+            avg[s] = numpy.average(data[s])
+            std[s] = numpy.std(data[s])
+        else:
+            avg[s] = 0
+            std[s] = 0
 
 
     return (avg, std)
@@ -124,20 +128,22 @@ for p, id in name_id.iteritems():
     # except our player
     # and do this by hero...
 
-    heroes = session.query(Hero).all()
+    heroes = session.query(Hero).order_by(Hero.localized_name).all()
 
     havg = {}
     hstd = {}
 
     for hero in heroes:
 
+
 #        print "Analyzing", hero.localized_name, "..."
         if id == ANONYMOUS_ID: # pull everything in for anon
-            players = session.query(Player).filter(Player.hero == hero, Player.points > -100).join(Match).filter(Match.is_significant_p==True).all()
+            players = session.query(Player).filter(Player.hero == hero).join(Match).filter(Match.is_significant_p==True).all()
         else:
-            players = session.query(Player).filter(Player.hero == hero, Player.account_id != id, Player.match_id.in_(matches), Player.points > -100).join(Match).filter(Match.is_significant_p==True).all()
+            players = session.query(Player).filter(Player.hero == hero, Player.account_id != id, Player.match_id.in_(matches)).join(Match).filter(Match.is_significant_p==True).all()
 
         (havg[hero.id], hstd[hero.id]) = analyze_player_performances(players)
+
 
     pavg[id] = havg
     pstd[id] = hstd
