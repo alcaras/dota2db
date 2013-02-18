@@ -84,6 +84,8 @@ def matches_and_players(matches):
     for match in matches:
         m = match.id
         players_for_match[m] = []
+
+        match.starttime += datetime.timedelta(hours=2)
         
         if match.game_mode in GAME_MODES:
             match.__setattr__("mode_name", GAME_MODES[match.game_mode])
