@@ -33,6 +33,44 @@ import pprint
 pp = pprint.PrettyPrinter(indent = 4)
 
 
+
+
+def prepare_match_preview():
+    fields = [ "player_slot",
+               "player_name",
+               "kda",
+               "hero_points",
+               "hero_icon",
+               "kills",
+               "deaths",
+               "assists",
+               "gold_per_min",
+               "xp_per_min",
+               "last_hits_per_min",
+               ]
+    return fields
+
+def prepare_match_full():
+    fields = [ "player_slot",
+               "player_name",
+               "kda",
+               "hero_points",
+               "hero_icon",
+               "level",
+               "kills",
+               "deaths",
+               "assists",
+               "last_hits",
+               "denies",
+               "last_hits_per_min",
+               "gold_per_min",
+               "xp_per_min",
+               ]
+    return fields
+
+
+
+
 def matches_and_players(matches):
 
     match_ids = []
@@ -85,8 +123,6 @@ def matches_and_players(matches):
 
 
 
-                
-
     # okay the proper way to do this is to generate it here
 
 
@@ -117,7 +153,8 @@ def index(page = 1):
     return render_template("index.html", matches = matches_query,
                            pagination = matches_pagination,
                            players_for_match = players_for_match,
-                           player_pages = sorted_players)
+                           player_pages = sorted_players,
+                           fields = prepare_match_preview())
 
 @app.route('/match/<int:id>')
 def match(id):
@@ -127,7 +164,8 @@ def match(id):
     (matches, players_for_match) = matches_and_players(matches_query)
     
     return render_template("match.html", match = match,
-                           players_for_match=players_for_match)
+                           players_for_match=players_for_match,
+                           fields = prepare_match_full())
 
 
 
@@ -161,7 +199,8 @@ def player(name, page = 1):
     return render_template("player.html", matches = matches_query,
                            pagination = matches_pagination,
                            players_for_match = players_for_match,
-                           player_name = player_name)
+                           player_name = player_name,
+                           fields = prepare_match_preview())
 
 
 
@@ -266,7 +305,6 @@ def player_heroes(name):
         h.__setattr__("kda", kda)
         h.__setattr__("win_wilson", win_wilson)
         h.__setattr__("points_lb_ci", points_lb_ci)
-
 
 
     

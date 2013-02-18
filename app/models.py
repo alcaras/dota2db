@@ -158,7 +158,7 @@ class Hero(Base):
     def __repr__(self):
         return "<Hero('%s', '%s', '%s')>" % (self.id, self.localized_name, self.name)
     def img_inline(self):
-        return "<img src=\"/static/img/" + string.replace(self.name, "npc_dota_hero_", "") + "_sm.png\" alt=\"" + self.localized_name + "\" title=\"" + self.localized_name + "\" style=\"width:46px; height:26px; display:block;\" />"
+        return "<img src=\"/static/img/" + string.replace(self.name, "npc_dota_hero_", "") + "_sm.png\" alt=\"" + self.localized_name + "\" title=\"" + self.localized_name + "\" style=\"width:46px; height:26px; display:block; align: center;\" /><span style=\"display: none;\">"+ self.localized_name + "</span>"
 
 class Item(Base):
     __tablename__ = 'items'

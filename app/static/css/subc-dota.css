@@ -28,6 +28,7 @@ td.hero {
     padding: 0px;
     vertical-align: middle;
     text-align: center;
+    width: 50px;
 
 }
 
@@ -61,6 +62,7 @@ th.points {
 
 th.hero {
     text-align: center;
+    width: 50px;
 
 }
 
@@ -77,15 +79,20 @@ th.victory {
   background-color: #000000;
 }
 
+
+/*
+4 5 6 7 8 9 a b c d e f
+        4 5 6 7 8 9 a b
+*/
 td.radiant,
 .table-striped tbody > tr:nth-child(odd) > td.radiant {
-    background-color: #468847;
-    color: #468847;
+/*     background-color: #468847; */
+    background-color: #8acc8b;
 }
 
 td.dire,
 .table-striped tbody > tr:nth-child(odd) > td.dire {
-    background-color: #b94a48;
-    color: #b94a48;
+/*    background-color: #b94a48; */
+    background-color: #fd8e8c;
 }
 

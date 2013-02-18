@@ -1,0 +1,90 @@
+{% macro th(field) -%}
+{% if field == 'player_slot' %}
+<th class="team victory">&star;</th>     
+{% elif field == 'player_name' %}
+<th class="name"></th>
+{% elif field == 'kda' %}
+<th class="number">kda</th>     
+{% elif field == 'hero_points' %}
+<th class="points">points</th>  
+{% elif field == 'hero_icon' %}
+<th class="hero">hero</th> 
+{% elif field == 'level' %}
+<th class="number">lvl</th>     
+{% elif field == 'kills' %}
+<th class="number">k</th>       
+{% elif field == 'deaths' %}
+<th class="number">d</th>        
+{% elif field == 'assists' %}
+<th class="number">a</th>       
+{% elif field == 'last_hits' %}
+<th class="large_number">lh</th>     
+{% elif field == 'denies' %}
+<th class="number">dn</th>      
+{% elif field == 'last_hits_per_min' %}
+<th class="large_number">lh/m</th>   
+{% elif field == 'gold_per_min' %}
+<th class="large_number">gpm</th>     
+{% elif field == 'xp_per_min' %}
+<th class="large_number">xpm</th>     
+{% else %}
+<th class="unsortable"><span class="label label-important">?? unknown field {{field}}</span></th>
+{% endif %}
+{%- endmacro %}
+
+
+{% macro td(field, player) -%}
+{% if field == 'player_slot' %}
+  {% if player.player_slot < 100 %}
+<td class="team radiant">
+  <span style="display:none">{{player.player_slot}}</span>
+  {% else %}
+<td class="team dire">
+  <span style="display:none">{{player.player_slot-123}}</span>
+  {% endif %}
+  {% if player.win == True %}
+  <i class="icon-star"></i>
+  {% endif %}
+</td>
+
+{% elif field == 'player_name' %}
+<td class="name">
+  {% if player.player_name != "" %}
+  <a href="{{url_for('player',  name=player.player_name)}}">
+    {{player.player_name}}
+  </a>
+  {% endif %}
+</td>
+{% elif field == 'kda' %}
+<td class="number">{{ player.kda|safe }}</td>
+{% elif field == 'hero_points' %}
+<td class="points">
+  {% import 'hero-points.html' as hero %}
+  {{ hero.points(player.points) }}
+</td>
+{% elif field == 'hero_icon' %}
+<td class="hero">
+    {{player.hero.img_inline()|safe}}
+</td>
+{% elif field == 'level' %}
+<td class="number">{{player.level}}</td>
+{% elif field == 'kills' %}
+<td class="number">{{player.kills}}</td>
+{% elif field == 'deaths' %}
+<td class="number">{{player.deaths}}</td>
+{% elif field == 'assists' %}
+<td class="number">{{player.assists}}</td>
+{% elif field == 'last_hits' %}
+<td class="large_number">{{player.last_hits}}</td>
+{% elif field == 'denies' %}
+<td class="number">{{player.denies}}</td>
+{% elif field == 'last_hits_per_min' %}
+<td class="large_number">{{ player.lhpm|safe }}</td>
+{% elif field == 'gold_per_min' %}
+<td class="large_number">{{player.gold_per_min}}</td>
+{% elif field == 'xp_per_min' %}
+<td class="large_number">{{player.xp_per_min}}</td>
+{% else %}
+<td><span class="label label-important">?? unknown field {{field}}</span></td>
+{% endif %}
+{%- endmacro %}
