@@ -47,6 +47,7 @@ def prepare_match_preview():
                "gold_per_min",
                "xp_per_min",
                "last_hits_per_min",
+               "teamfight_participation",
                ]
     return fields
 
@@ -63,6 +64,7 @@ def prepare_match_full():
                "last_hits",
                "denies",
                "last_hits_per_min",
+               "teamfight_participation",
                "gold_per_min",
                "xp_per_min",
                ]
@@ -102,8 +104,19 @@ def matches_and_players(matches):
 
         match.__setattr__("first_blood_time_pretty", str(datetime.timedelta(seconds=int(match.first_blood_time))))
 
+        kills_radiant = 0
+        kills_dire = 0
+
         for p in players:
             if p.match_id == m:
+                if p.player_slot < 100:
+                    kills_radiant += p.kills
+                else:
+                    kills_dire += p.kills
+
+        for p in players:
+            if p.match_id == m:
+
                 players_for_match[m] += [p]
                 if p.account_id in NAME_ID.values():
                     p.__setattr__("player_name", ID_NAME[p.account_id])            
@@ -122,7 +135,17 @@ def matches_and_players(matches):
                 else:
                     p.__setattr__("lhpm", "&infin;")
 
+                tfp = float(p.kills + p.assists)
+                if p.player_slot < 100:
+                    if kills_radiant > 0:
+                        tfp = float(tfp)/float(kills_radiant)
+                else:
+                    if kills_dire > 0:
+                        tfp = float(tfp)/float(kills_dire)
 
+                tfp = str(int(tfp * 100))
+                        
+                p.__setattr__("teamfight_participation", tfp)
 
 
 
