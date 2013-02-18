@@ -98,6 +98,8 @@ def matches_and_players(matches):
         
         match.__setattr__("duration_pretty", str(datetime.timedelta(seconds=int(match.duration))))
 
+        match.__setattr__("first_blood_time_pretty", str(datetime.timedelta(seconds=int(match.first_blood_time))))
+
         for p in players:
             if p.match_id == m:
                 players_for_match[m] += [p]
