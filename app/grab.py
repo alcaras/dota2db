@@ -275,6 +275,17 @@ def grab_match(id):
   return 1 # all good
 
 
+id = 128750390
+req = get_match_details(id)
+if req == None:
+  print "Got None, skipping...",id
+  
+json_req = req.json()
+pp.pprint(json_req)
+
+sys.exit()
+
+
 
 date_min = None
 
