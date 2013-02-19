@@ -4,18 +4,16 @@ td.num {
 }
 
 td.name {
-    width : 30%;
     text-align: left;
 }
 
 td.number {
     text-align: right;
-    width: 4%;
+
 }
 
 td.large_number {
     text-align: right;
-    width: 6%;
 }
 
 th.points,
@@ -42,18 +40,17 @@ th.team {
 }
 
 th.name {
-    width : 30%;
+    width: 75px;
     text-align: left;
 }
 
 th.number {
     text-align: right;
-    width: 4%;
 }
 
 th.large_number {
     text-align: right;
-    width: 5%;
+
 }
 
 th.points {
@@ -84,12 +81,14 @@ th.victory {
 4 5 6 7 8 9 a b c d e f
         4 5 6 7 8 9 a b
 */
+th.radiant,
 td.radiant,
 .table-striped tbody > tr:nth-child(odd) > td.radiant {
 /*     background-color: #468847; */
     background-color: #8acc8b;
 }
 
+th.dire,
 td.dire,
 .table-striped tbody > tr:nth-child(odd) > td.dire {
 /*    background-color: #b94a48; */

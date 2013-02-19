@@ -9,7 +9,9 @@
 <li>{{ pagination.links|safe }}</li>
 
 {% for match in matches.items %}
-<li>{% include 'match-preview.html' %}</li>
+<li>
+{% include 'match-preview.html' %}
+</li>
 {% endfor %}
 <li>{{ pagination.links|safe }}</li>
 </ul>

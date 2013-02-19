@@ -2,9 +2,13 @@
 {% block content %}
 <div class="row">
   <div class="span12">
-    <h2>Match {{match.id}}</h2>
+    <h2>Match {{match.id}}
+    {% if match.is_significant_p == False %}
+    <span class="badge">Insignificant</span>
+    {% endif %}
+    </h2>
     <div class="well">
-    {% include 'match-preview.html' %}
+      {% include 'match-preview.html' %}
     </div>
   </div>
 </div>
@@ -16,11 +20,18 @@
       <table class="table table-striped">
 	<tr>
 	  <th>First Blood Time</th>
-	  <td>{{match.first_blood_time_pretty}}</th>
+	  <td>{{match.first_blood_time_pretty}}</td>
 	</tr>
       </table>
     </div>
   </div>
+  <div class="span8">
+    <div class="well">
+      <h3>Buildings</h3>
+      {{match.buildings()|safe}}
+    </div>
+  </div>
+		    
 </div>
 
 

@@ -1,3 +1,5 @@
+from flask import render_template
+
 from sqlalchemy import create_engine, ForeignKey
 from sqlalchemy import Column, Date, BigInteger, Boolean, Integer, String, DateTime, Time
 from sqlalchemy.ext.declarative import declarative_base
@@ -70,6 +72,38 @@ class Match(Base):
         self.tower_status_dire = tower_status_dire
         self.tower_status_radiant = tower_status_radiant
         self.is_significant = is_significant_p
+        
+    def radiant_tower(self, which):
+        if (self.tower_status_radiant & which) == which:
+            return "badge-success"
+        else:
+            return ""
+
+    def radiant_barracks(self, which):
+        if (self.barracks_status_radiant & which) == which:
+            return "badge-success"
+        else:
+            return ""
+
+    def dire_tower(self, which):
+        if (self.tower_status_dire & which) == which:
+            return "badge-important"
+        else:
+            return ""
+
+    def dire_barracks(self, which):
+        if (self.barracks_status_dire & which) == which:
+            return "badge-important"
+        else:
+            return ""
+
+
+
+
+    def buildings(self):
+        return render_template("building-display.html",
+                               match = self)
+
         
     def __repr__(self):
         return "<Match('%s')>" % (self.id)
@@ -158,7 +192,9 @@ class Hero(Base):
     def __repr__(self):
         return "<Hero('%s', '%s', '%s')>" % (self.id, self.localized_name, self.name)
     def img_inline(self):
-        return "<img src=\"/static/img/" + string.replace(self.name, "npc_dota_hero_", "") + "_il.png\" alt=\"" + self.localized_name + "\" title=\"" + self.localized_name + "\" style=\"width:47px; height:26px; display:block; align: center;\" /><span style=\"display: none;\">"+ self.localized_name + "</span>"
+        short_name = string.replace(self.name, "npc_dota_hero_", "")
+        return render_template('inline-image.html', hero=self,
+                               short_name = short_name)
 
 class Item(Base):
     __tablename__ = 'items'

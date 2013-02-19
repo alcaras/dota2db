@@ -67,6 +67,9 @@ def prepare_match_full():
                "teamfight_participation",
                "gold_per_min",
                "xp_per_min",
+               "hero_damage",
+               "hero_healing",
+               "tower_damage",
                ]
     return fields
 
@@ -189,10 +192,14 @@ def match(id):
     matches_query = [match]
 
     (matches, players_for_match) = matches_and_players(matches_query)
-    
+
+    fields = prepare_match_full()    
+    if match.is_significant_p == False:
+        fields += ["leaver_status"]
+
     return render_template("match.html", match = match,
                            players_for_match=players_for_match,
-                           fields = prepare_match_full())
+                           fields = fields)
 
 
 
