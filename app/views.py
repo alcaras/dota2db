@@ -179,12 +179,18 @@ def index(page = 1):
                             key=operator.itemgetter(0))
     sorted_players = sorted(sorted_players,
                             key = lambda s: s[0].lower())
+
+    start = 1 + (matches_pagination.page - 1) * matches_pagination.per_page
+    end = start + matches_pagination.per_page - 1
+
+    title = "Matches " + str(start) + " - " + str(end) + " of " + str(matches_pagination.total)
     
     return render_template("index.html", matches = matches_query,
                            pagination = matches_pagination,
                            players_for_match = players_for_match,
                            player_pages = sorted_players,
-                           fields = prepare_match_preview())
+                           fields = prepare_match_preview(),
+                           title = title)
 
 @app.route('/match/<int:id>')
 def match(id):
@@ -197,9 +203,12 @@ def match(id):
     if match.is_significant_p == False:
         fields += ["leaver_status"]
 
+    title = "Match " + str(match.id)
+
     return render_template("match.html", match = match,
                            players_for_match=players_for_match,
-                           fields = fields)
+                           fields = fields,
+                           title = title)
 
 
 
@@ -228,13 +237,14 @@ def player(name, page = 1):
     (matches, players_for_match) = matches_and_players(matches_query.items)
 
 
-
+    title = player_name
 
     return render_template("player.html", matches = matches_query,
                            pagination = matches_pagination,
                            players_for_match = players_for_match,
                            player_name = player_name,
-                           fields = prepare_match_preview())
+                           fields = prepare_match_preview(),
+                           title = title)
 
 
 
@@ -341,10 +351,12 @@ def player_heroes(name):
         h.__setattr__("points_lb_ci", points_lb_ci)
 
 
-    
+    title = player_name + "'s Heroes"
+
     return render_template("player-heroes.html",
                            heroes = heroes_query,
-                           player_name = player_name)
+                           player_name = player_name,
+                           title = title)
 
 
 
