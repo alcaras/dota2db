@@ -30,6 +30,15 @@ td.hero {
 
 }
 
+td.item {
+    padding: 0px;
+    padding-left: 2px;
+    vertical-align: middle;
+    text-align: center;
+    width: 35px;
+
+}
+
 td.victory {
 
 }

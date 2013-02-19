@@ -48,6 +48,7 @@ def prepare_match_preview():
                "xp_per_min",
                "last_hits_per_min",
                "teamfight_participation",
+               "items"
                ]
     return fields
 
@@ -70,6 +71,7 @@ def prepare_match_full():
                "hero_damage",
                "hero_healing",
                "tower_damage",
+               "items"
                ]
     return fields
 

@@ -207,4 +207,8 @@ class Item(Base):
         self.name = name
     def __repr__(self):
         return "<Item('%s', '%s', '%s')>" % (self.id, self.localized_name, self.name)
+    def img_inline(self):
+        short_name = string.replace(self.name, "item_", "")
+        return render_template('inline-image-item.html', item=self,
+                               short_name = short_name)
 

@@ -34,7 +34,9 @@
 {% elif field == 'hero_healing' %}
 <th class="large_number">heal</th>
 {% elif field == 'tower_damage' %}
-<th class="large_number">tower</th>     
+<th class="large_number">tower</th>    
+{% elif field == 'items' %}
+<th class="unsortable" colspan=6>items</th>  
 {% elif field == 'leaver_status' %}
 <th class="large_number">leave</th>     
 {% else %}
@@ -102,6 +104,37 @@
 <td class="large_number">{{player.hero_healing}}</td>
 {% elif field == 'tower_damage' %}
 <td class="large_number">{{player.tower_damage}}</td>
+{% elif field == 'items' %}
+<td class="item">
+  {% if player.item0  %}
+  {{player.item0.img_inline()|safe}}
+  {% endif %}
+</td>
+<td class="item">
+  {% if player.item1  %}
+  {{player.item1.img_inline()|safe}}
+  {% endif %}
+</td>
+<td class="item">
+  {% if player.item2  %}
+  {{player.item2.img_inline()|safe}}
+  {% endif %}
+</td>
+<td class="item">
+  {% if player.item3  %}
+  {{player.item3.img_inline()|safe}}
+  {% endif %}
+</td>
+<td class="item">
+  {% if player.item4  %}
+  {{player.item4.img_inline()|safe}}
+  {% endif %}
+</td>
+<td class="item">
+  {% if player.item5  %}
+  {{player.item5.img_inline()|safe}}
+  {% endif %}
+</td>
 {% elif field == 'leaver_status' %}
 <td class="number">{{player.leaver_status}}</td>
 {% else %}
