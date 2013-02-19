@@ -1,5 +1,5 @@
 # pagination
-MATCHES_PER_PAGE = 10
+MATCHES_PER_PAGE = 5
 
 NAME_ID = {
  "alcaras": 32775483,
