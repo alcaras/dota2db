@@ -44,3 +44,34 @@ CLUSTERS = {
     111 : 'US West',
     122 : 'US East',
 }
+
+
+# top 25 heroes
+# based on a 6 week rolling slide
+TOP_TIER = {
+    "Nyx Assassin",
+    "Batrider",
+    "Dark Seer",
+    "Keeper of the Light",
+    "Magnus",
+    "Wisp",
+    "Shadow Demon",
+    "Undying",
+    "Lifestealer",
+    "Lone Druid",
+    "Rubick",
+    "Luna",
+    "Queen of Pain",
+    "Gyrocopter",
+    "Bane",
+    "Puck",
+    "Templar Assassin",
+    "Bounty Hunter",
+    "Enigma",
+    "Chen",
+    "Leshrac",
+    "Nature's Prophet",
+    "Phantom Lancer",
+    "Windrunner",
+    "Chaos Knight",
+}

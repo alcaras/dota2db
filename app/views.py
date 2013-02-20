@@ -358,7 +358,8 @@ def player_heroes(name):
     return render_template("player-heroes.html",
                            heroes = heroes_query,
                            player_name = player_name,
-                           title = title)
+                           title = title,
+                           highlight = TOP_TIER)
 
 
 

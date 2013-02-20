@@ -36,7 +36,15 @@
 	<tr>
 	  <td></td>
 	  <td>{{h.Hero.img_inline()|safe}}</td>
-	  <td>{{h.Hero.localized_name}}</td>
+	  <td>
+	    {% if h.Hero.localized_name in highlight %}
+	    <b>
+	      {% endif %}
+	    {{h.Hero.localized_name}}
+	    {% if h.Hero.localized_name in highlight %}
+	    </b>
+	      {% endif %}
+	  </td>
 	  <td class="num">{{h.played}}</td>
 	  <td class="num">{{h.wins}}</td>
 	  <td class="num">{{h.win_pct}}</td>
@@ -100,6 +108,11 @@ hero score, but if the hero sucks then you'll still lose quite a bit
 (looking at you, Meepo). Keep this in mind when comparing hero points
 and win WSI.</dd>
 
+<dt>Why are some heroes in bold?</dt>
+<dd>
+They're in the Top 25 most picked/banned in Pro Games in the last six
+weeks.
+</dd>
 </dl>
 </small>
 </p>
