@@ -27,8 +27,8 @@ ANONYMOUS_ID = "4294967295"
 # hero_damage, tower_damage, hero_healing
 
 # we can shift and scale
-# our lowest score is -3*5+1 (-14)
-# our high score is 5*5+5 (30)
+# our lowest score is -3*5 (-15)
+# our high score is 5*5 (25)
 
 stat_weights = {"kills" : 1,
                 "deaths" : 1,
@@ -110,23 +110,23 @@ def calculateHeroPoints(p, duration=None):
 
         score += stat_weights[s] * bonus
 
-        if dis <= (20*60) and (p.win==1):
-            score += 5  # stomp bonus
-        if dis > (20*60) and (p.win==1):
-            score += 3 # a standard win
-        if dis < (50*60) and (p.win==0):
-            score += 1 # consolation prize
-        if dis >= (50*60) and (p.win==0):
-            score += 2 # bonus for holding out so long
+#         if dis <= (20*60) and (p.win==1):
+#             score += 5  # stomp bonus
+#         if dis > (20*60) and (p.win==1):
+#             score += 3 # a standard win
+#         if dis < (50*60) and (p.win==0):
+#             score += 1 # consolation prize
+#         if dis >= (50*60) and (p.win==0):
+#             score += 2 # bonus for holding out so long
 
     # scale
     
 
 
             
-    scaled_score = (score - (-14)) # subtract the lowest possible score
+    scaled_score = (score - (-15)) # subtract the lowest possible score
     # divide by our score range
-    scaled_score = float(scaled_score) / 44 * 101 # range over 0-100
+    scaled_score = float(scaled_score) / 40 * 100 # range over 0-100
     scaled_score = round(scaled_score, 0)
     
     
