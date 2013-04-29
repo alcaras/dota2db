@@ -26,6 +26,11 @@ ANONYMOUS_ID = "4294967295"
 # last_hits, denies, xpm,
 # hero_damage, tower_damage, hero_healing
 
+# we're going to look at a different set of stats
+# kills+assists
+# deaths
+# gpm
+
 # we can shift and scale
 # our lowest score is -3*5 (-15)
 # our high score is 5*5 (25)
@@ -34,9 +39,12 @@ stat_weights = {"kills" : 1,
                 "deaths" : 1,
                 "assists" : 1,
                 "gold_per_min" : 1,
-                "xp_per_min" : 1}
-
-stats_to_per_min = {"kills", "deaths", "assists"}
+                "xp_per_min" : 1,
+                "tower_damage": 1,
+                "hero_damage": 1,
+                "hero_healing": 1,
+                "last_hits" : 1,
+                "denies" : 1}
 
 from models import *
 from db import session
@@ -52,9 +60,9 @@ import sys
 # calculate hero points for a player
 def calculateHeroPoints(p, duration=None):
     
-    a = p.account_id
-    if a not in hero_avg:
-        a = ANONYMOUS_ID # use anonymous for people we don't know
+#    a = p.account_id
+#    if a not in hero_avg:
+    a = ANONYMOUS_ID # use anonymous for people we don't know
         
     h = p.hero_id
 
@@ -72,6 +80,9 @@ def calculateHeroPoints(p, duration=None):
 
     score = 0
 
+ #   print 
+#    print p.hero
+
 # points
 #       -2o    -1o     x    +1o    +2o        standard deviations from average
 #   -3      -1      0     1      3      5     points for falling into a range
@@ -87,26 +98,48 @@ def calculateHeroPoints(p, duration=None):
 
         dim = int(dis/60)
 
+        
+        old_k = k
         if s in stats_to_per_min: # we need to divide by duration
             if dim == 0:
                 k = 0 # can't divide by 0
             else:
-                k = k / dim
+                k = float(k) / float(dim)
+
 
         bonus = 0
 
-        if k >= float(hero_avg[a][h][s] + 2*hero_std[a][h][s]):
-            bonus = 5
-        elif k >= float(hero_avg[a][h][s] + 1*hero_std[a][h][s]):
-            bonus = 3
-        elif k >= float(hero_avg[a][h][s] + 0*hero_std[a][h][s]):
-            bonus = 1
-        elif k >= float(hero_avg[a][h][s] + -1*hero_std[a][h][s]):
-            bonus  =0
-        elif k >= float(hero_avg[a][h][s] + -2*hero_std[a][h][s]):
-            bonus = -1
-        else:
-            bonus = -3
+        if s != "deaths":
+            
+            if k >= float(hero_avg[a][h][s] + 2*hero_std[a][h][s]):
+                bonus = 5
+            elif k >= float(hero_avg[a][h][s] + 1*hero_std[a][h][s]):
+                bonus = 3
+            elif k >= float(hero_avg[a][h][s] + 0*hero_std[a][h][s]):
+                bonus = 1
+            elif k >= float(hero_avg[a][h][s] + -1*hero_std[a][h][s]):
+                bonus  =0
+            elif k >= float(hero_avg[a][h][s] + -2*hero_std[a][h][s]):
+                bonus = -1
+            else:
+                bonus = -3
+
+        else: # deaths is inverted, as less is more
+
+            if k <= float(hero_avg[a][h][s] + -2*hero_std[a][h][s]):
+                bonus = 5
+            elif k <= float(hero_avg[a][h][s] + -1*hero_std[a][h][s]):
+                bonus = 3
+            elif k <= float(hero_avg[a][h][s] + 0*hero_std[a][h][s]):
+                bonus = 1
+            elif k <= float(hero_avg[a][h][s] + 1*hero_std[a][h][s]):
+                bonus  =0
+            elif k <= float(hero_avg[a][h][s] + 2*hero_std[a][h][s]):
+                bonus = -1
+            else:
+                bonus = -3
+
+#        print s, old_k, k, "a", hero_avg[a][h][s], hero_std[a][h][s], bonus
 
         score += stat_weights[s] * bonus
 
@@ -122,12 +155,31 @@ def calculateHeroPoints(p, duration=None):
     # scale
     
 
-
+#    print score
             
-    scaled_score = (score - (-15)) # subtract the lowest possible score
+
+    lowest_score = 0
+    for s in stats:
+        lowest_score += abs(stat_weights[s]) * -3
+
+#    print lowest_score
+
+    highest_score = 0
+    for s in stats:
+        highest_score += abs(stat_weights[s]) * 5
+
+#    print highest_score
+
+    range = highest_score - lowest_score + 1
+
+#    print range
+
+    scaled_score = (score - (lowest_score)) # subtract the lowest possible score
     # divide by our score range
-    scaled_score = float(scaled_score) / 40 * 100 # range over 0-100
+    scaled_score = float(scaled_score) / range * 100 # range over 0-100
     scaled_score = round(scaled_score, 0)
+
+#    print scaled_score
     
     
 

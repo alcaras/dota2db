@@ -43,18 +43,18 @@ import pprint
 pp = pprint.PrettyPrinter(indent = 4)
 
 name_id = {
- "alcaras": 32775483,
- "Rip" : 8899909,
- "Speed": 9541377,
- "Krygore" : 9929964,
- "Vorsh" : 703282,
+ # "alcaras": 32775483,
+ # "Rip" : 8899909,
+ # "Speed": 9541377,
+ # "Krygore" : 9929964,
+ # "Vorsh" : 703282,
 
- "m1gemini" : 8807692,
- "Wyv": 64684222,
- "Boozie" : 537293,
+ # "m1gemini" : 8807692,
+ # "Wyv": 64684222,
+ # "Boozie" : 537293,
 
- "Don" : 33402007,
- "dgeis" : 100516439,
+ # "Don" : 33402007,
+ # "dgeis" : 100516439,
  
 
  "Anonymous" : ANONYMOUS_ID,
@@ -73,10 +73,10 @@ print "hello from the nhp"
 # step 1 -- we need a list of matches with the player in them
 def obtain_matches_with_account_id(account_id):
     ids = []
-    if account_id == ANONYMOUS_ID:
-        l = session.query(Player.match_id).join(Player.match).filter_by(is_significant_p=True).all()
-    else:
-        l = session.query(Player.match_id).filter_by(account_id=account_id).join(Player.match).filter_by(is_significant_p=True).all()
+#    if account_id == ANONYMOUS_ID:
+    l = session.query(Player.match_id).join(Player.match).filter_by(is_significant_p=True).all()
+#    else:
+#        l = session.query(Player.match_id).filter_by(account_id=account_id).join(Player.match).filter_by(is_significant_p=True).all()
     ids = [item for sublist in l for item in sublist]
     ids = list(set(ids))
     return ids
@@ -96,9 +96,18 @@ def analyze_player_performances(players):
         std[s] = []
 
     for p in players:
-        for s in stats:
-            data[s] += [p.__dict__[s]]
+        dis = p.match.duration
 
+
+        dim = int(dis/60)
+
+        for s in stats:
+            raw = p.__dict__[s]
+#            print s, raw,
+            if s in stats_to_per_min:
+                raw = float(raw)/float(dim)            
+#            print raw
+            data[s] += [raw]
 
             
     for s in stats:
@@ -133,14 +142,18 @@ for p, id in name_id.iteritems():
     havg = {}
     hstd = {}
 
-    for hero in heroes:
+    
+    for i, hero in  enumerate(heroes):
 
 
-#        print "Analyzing", hero.localized_name, "..."
-        if id == ANONYMOUS_ID: # pull everything in for anon
-            players = session.query(Player).filter(Player.hero == hero).join(Match).filter(Match.is_significant_p==True).all()
-        else:
-            players = session.query(Player).filter(Player.hero == hero, Player.account_id != id, Player.match_id.in_(matches)).join(Match).filter(Match.is_significant_p==True).all()
+        # just pull in everything
+        print "Analyzing", hero.localized_name,
+        print "(" + str(i+1) + " of", str(len(heroes)) + ")",
+#        if id == ANONYMOUS_ID: # pull everything in for anon
+        players = session.query(Player).filter(Player.hero == hero).join(Match).filter(Match.is_significant_p==True).all()
+        print "("+str(len(players)), "matches)..."
+#        else:
+#            players = session.query(Player).filter(Player.hero == hero, Player.account_id != id, Player.match_id.in_(matches)).join(Match).filter(Match.is_significant_p==True).all()
 
         (havg[hero.id], hstd[hero.id]) = analyze_player_performances(players)
 

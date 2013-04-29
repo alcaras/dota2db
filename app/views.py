@@ -359,7 +359,7 @@ def player_heroes(name):
                            heroes = heroes_query,
                            player_name = player_name,
                            title = title,
-                           highlight = TOP_TIER)
+                           highlight = [])
 
 
 

@@ -23,10 +23,23 @@ all_stats = ["assists", "kills", "deaths",
          "tower_damage", "hero_damage", 
 ]
  
-# stats we care about
+# stats we care about, everything except denies
 stats = ["assists", "kills", "deaths",
          "gold_per_min", "xp_per_min",
+         "last_hits", "tower_damage", "hero_damage",
+         "hero_healing", "denies",
 ]
+
+
+stats_to_per_min = ["assists", "kills", "deaths",
+         "hero_healing",
+         "last_hits", "denies",
+         "tower_damage", "hero_damage", 
+]
+
+
+
+
 
 class Match(Base):
     __tablename__ = 'matches'
