@@ -24,10 +24,10 @@ name_id = NAME_ID
 # 2. refresh -- grab just matches within the last X (date_min)
 #    (don't overwrite matches)
 
-refreshOnly = False # usually should be true, unless you're adding someone new
+refreshOnly = True # usually should be true, unless you're adding someone new
 
-fullCrawlFor =  "Elow" # set this to an id to full crawl
-enableFullCrawl = True # set this to true for a full crawl (for a particular person)
+fullCrawlFor =  "" # set this to an id to full crawl
+enableFullCrawl = False # set this to true for a full crawl (for a particular person)
 
 import datetime
 import time
