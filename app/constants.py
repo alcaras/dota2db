@@ -4,12 +4,16 @@ MATCHES_PER_PAGE = 5
 NAME_ID = {
  "alcaras": 32775483,
  "Rip" : 8899909,
+ "Wyv": 64684222,
  "Speed": 9541377,
+ "Elow" : 14631471,
+    
+
  "Krygore" : 9929964,
  "Vorsh" : 703282,
 
  "m1gemini" : 8807692,
- "Wyv": 64684222,
+
  "Boozie" : 537293,
 
  "Don" : 33402007,
