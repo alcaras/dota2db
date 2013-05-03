@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+  <div class="span12">
+    <h2>{{hero_name}}</h2>
+  </div>
+  <div class="span12">
+    <h3>{{ pagination.info|safe }}</h3>
+  </div>
+</div>
+<div class="row">
+  <div class="span9">
+    <div class="well">
+      <ul class="nav nav-pills nav-stacked">
+	
+	<li>{{ pagination.links|safe }}</li>
+	
+	{% for match in matches.items %}
+	<li>{% include 'match-preview.html' %}</li>
+	{% endfor %}
+
+	<li>{{ pagination.links|safe }}</li>
+
+      </ul>
+    </div>
+  </div>
+  <div class="span3">
+    <div class="well">
+      <ul class="nav nav-pills nav-stacked">
+	{% for hero in all_heroes %}
+	   {% if hero.localized_name == hero_name %}
+	         <li class="active"><a href="#">
+           {% else %}
+                 <li><a href="{{url_for('hero_matches', name=hero.short_name())}}">
+	   {% endif %}
+	   {{hero.localized_name}}
+	   </a></li>
+	{% endfor %}
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

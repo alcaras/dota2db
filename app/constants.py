@@ -1,5 +1,5 @@
 # pagination
-MATCHES_PER_PAGE = 5
+MATCHES_PER_PAGE = 10
 
 NAME_ID = {
  "alcaras": 32775483,
@@ -79,3 +79,5 @@ TOP_TIER = {
     "Windrunner",
     "Chaos Knight",
 }
+
+

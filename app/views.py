@@ -1,8 +1,5 @@
 from app import app, db 
 
-# idea: "team fight participation" stat
-# sortable columns in match view (by team and overall)
-
 import string
 import operator
 
@@ -74,7 +71,6 @@ def prepare_match_full():
                "items"
                ]
     return fields
-
 
 
 
@@ -151,14 +147,7 @@ def matches_and_players(matches):
                 tfp = str(int(tfp * 100))
                         
                 p.__setattr__("teamfight_participation", tfp)
-
-
-
-
-    # okay the proper way to do this is to generate it here
-
-
-    
+  
 
     return (matches, players_for_match)
     
@@ -360,6 +349,90 @@ def player_heroes(name):
                            player_name = player_name,
                            title = title,
                            highlight = [])
+
+@app.route('/hero/<string:name>')
+@app.route('/hero/<string:name>/page/<int:page>')
+def hero_matches(name, page = 1):
+
+    hero_name_query = Hero.query.filter(Hero.name == HERO_PREFIX + name).all()
+
+
+    if len(hero_name_query) != 1:
+        abort(404)
+    else:
+        hero_name = hero_name_query[0].localized_name
+        hero_id = hero_name_query[0].id
+
+    all_heroes = Hero.query.order_by(Hero.localized_name.asc()).all()
+
+    matches_query = Match.query.join(Player).\
+        filter(Player.hero_id==hero_id,
+               Match.is_significant_p==True).\
+        order_by(Match.starttime.desc())
+    display_msg = '''Matches <b>{start} - {end}</b> of <b>{total}</b>'''
+    matches_pagination = Pagination(per_page = MATCHES_PER_PAGE,
+                                    total=matches_query.count(),
+                                    display_msg = display_msg,
+                                    page = page)
+    matches_query = matches_query.paginate(page, MATCHES_PER_PAGE, False)
+
+    (matches, players_for_match) = matches_and_players(matches_query.items)
+
+    title = hero_name
+
+    return render_template("hero-matches.html", matches = matches_query,
+                           pagination = matches_pagination,
+                           players_for_match = players_for_match,
+                           hero_name = hero_name,
+                           fields = prepare_match_preview(),
+                           all_heroes = all_heroes,
+                           title = title)
+
+@app.route('/player/<string:name>/hero/<string:hname>')
+@app.route('/player/<string:name>/hero/<string:hname>/page/<int:page>')
+def player_hero_matches(name, hname, page = 1):
+
+    if str(name) in NAME_ID.keys():
+        player_name = name
+        player_id = NAME_ID[str(name)]
+    else:
+        abort(404)
+
+    hero_name_query = Hero.query.filter(Hero.name == HERO_PREFIX + hname).all()
+
+    if len(hero_name_query) != 1:
+        abort(404)
+    else:
+        hero_name = hero_name_query[0].localized_name
+        hero_id = hero_name_query[0].id
+
+    all_heroes = Hero.query.order_by(Hero.localized_name.asc()).all()
+
+    matches_query = Match.query.join(Player).\
+        filter(Player.account_id==player_id,
+               Player.hero_id==hero_id,
+               Match.is_significant_p==True).\
+        order_by(Match.starttime.desc())
+
+    display_msg = '''Matches <b>{start} - {end}</b> of <b>{total}</b>'''
+    matches_pagination = Pagination(per_page = MATCHES_PER_PAGE,
+                                    total=matches_query.count(),
+                                    display_msg = display_msg,
+                                    page = page)
+    matches_query = matches_query.paginate(page, MATCHES_PER_PAGE, False)
+
+    (matches, players_for_match) = matches_and_players(matches_query.items)
+
+    title = name + " on " + hero_name
+
+    return render_template("player-hero-matches.html", matches = matches_query,
+                           pagination = matches_pagination,
+                           players_for_match = players_for_match,
+                           player_name = player_name,
+                           hero_name = hero_name,
+                           fields = prepare_match_preview(),
+                           all_heroes = all_heroes,
+                           title = title)
 
 
 

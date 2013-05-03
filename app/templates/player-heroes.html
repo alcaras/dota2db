@@ -35,12 +35,20 @@
 	{% for h in heroes %}
 	<tr>
 	  <td></td>
-	  <td>{{h.Hero.img_inline()|safe}}</td>
+	  <td>	      
+	    <a href="{{url_for('player_hero_matches',
+		     name=player_name, hname=h.Hero.short_name())}}">
+	      {{h.Hero.img_inline()|safe}}
+	    </a>
+	  </td>
 	  <td>
 	    {% if h.Hero.localized_name in highlight %}
 	    <b>
 	      {% endif %}
+	      <a href="{{url_for('player_hero_matches',
+	   name=player_name, hname=h.Hero.short_name())}}">
 	    {{h.Hero.localized_name}}
+	    </a>
 	    {% if h.Hero.localized_name in highlight %}
 	    </b>
 	      {% endif %}
@@ -108,11 +116,6 @@ hero score, but if the hero sucks then you'll still lose quite a bit
 (looking at you, Meepo). Keep this in mind when comparing hero points
 and win WSI.</dd>
 
-<dt>Why are some heroes in bold?</dt>
-<dd>
-They're in the Top 25 most picked/banned in Pro Games in the last six
-weeks.
-</dd>
 </dl>
 </small>
 </p>

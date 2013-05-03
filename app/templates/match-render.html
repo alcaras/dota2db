@@ -76,7 +76,7 @@
 </td>
 {% elif field == 'hero_icon' %}
 <td class="hero">
-    {{player.hero.img_inline()|safe}}
+    <a href="{{url_for('hero_matches', name=player.hero.short_name())}}">{{player.hero.img_inline()|safe}}</a>
 </td>
 {% elif field == 'level' %}
 <td class="number">{{player.level}}</td>

@@ -5,6 +5,8 @@ from sqlalchemy import Column, Date, BigInteger, Boolean, Integer, String, DateT
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
 
+HERO_PREFIX = "npc_dota_hero_"
+
 import string
 import pdb
 
@@ -202,12 +204,13 @@ class Hero(Base):
         self.id = id
         self.localized_name = localized_name
         self.name = name
+    def short_name(self):
+        return self.name.replace(HERO_PREFIX, "")
     def __repr__(self):
-        return "<Hero('%s', '%s', '%s')>" % (self.id, self.localized_name, self.name)
+        return "<Hero('%s', '%s', '%s')>" % (self.id, self.localized_name, self.short_name())
     def img_inline(self):
-        short_name = string.replace(self.name, "npc_dota_hero_", "")
         return render_template('inline-image.html', hero=self,
-                               short_name = short_name)
+                               short_name = self.short_name())
 
 class Item(Base):
     __tablename__ = 'items'
