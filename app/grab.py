@@ -129,6 +129,7 @@ def grab_match(id):
     match["radiant_win"] = details["radiant_win"]
 # apparently season got removed
 #    match["season"] = details["season"]
+    match["season"] = ""
     match["starttime"] = datetime.datetime.fromtimestamp(details["start_time"])
     match["tower_status_dire"] = details["tower_status_dire"]
     match["tower_status_radiant"] = details["tower_status_radiant"]
