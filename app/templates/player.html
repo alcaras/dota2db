@@ -28,7 +28,9 @@
     <div class="well">
       <ul class="nav nav-pills nav-stacked">
 	<li class="active"><a href="#">Matches</a></li>
-	<li><a href="{{url_for('player_heroes', name=player_name)}}">Heroes</a></li>
+	<li><a href="{{url_for('player_heroes',
+	name=player_name)}}">Heroes</a></li>
+	<li><a href="{{url_for('player_suggestions', name=player_name)}}">Suggestions</a></li>
 	<li class="disabled"><a href="">Records</a></li>
 	<li class="disabled"><a href="">Trends</a></li>
 	<li class="disabled"><a href="">Achievements</a></li>

@@ -437,3 +437,138 @@ def player_hero_matches(name, hname, page = 1):
 
 
 
+@app.route('/player/<string:name>/suggestions')
+def player_suggestions(name):
+
+    if str(name) in NAME_ID.keys():
+        player_name = name
+        player_id = NAME_ID[str(name)]
+    else:
+        abort(404)
+
+    stmt = db.session.query(Hero,
+                            func.count(Player.account_id).label("played"),
+                            func.sum(Player.win > 0, type_=Integer).label("wins"),
+                            func.sum(Player.kills).label("kills_sum"),
+                            func.sum(Player.deaths).label("deaths_sum"),
+                            func.sum(Player.assists).label("assists_sum"),
+                            func.avg(Player.points).label("points_avg")).\
+                            outerjoin(Player).\
+                            outerjoin(Player.match).\
+                            filter(Match.is_significant_p == True,
+                                   Player.account_id == player_id).\
+                                   group_by(Hero.id).\
+                                   order_by(Hero.localized_name).\
+                                   subquery()
+
+    heroes_query = db.session.query(Hero, stmt.c.played,
+                                    stmt.c.wins,
+                                    stmt.c.kills_sum,
+                                    stmt.c.deaths_sum,
+                                    stmt.c.assists_sum,
+                                    stmt.c.points_avg).outerjoin(stmt, Hero.id == stmt.c.id).\
+                                    order_by(Hero.localized_name).all()
+
+    # we also need to pull the entire points distribution...
+    heroes_points = db.session.query(Player.points,
+                                     Hero).\
+                                     join(Player.match).\
+                                     join(Hero).\
+                                     filter(Match.is_significant_p==True,
+                                            Player.account_id==player_id).\
+                                            all()
+
+    # hero point distributions
+
+    hpd = {}
+       
+    for hp in heroes_points:
+        if hp.Hero.id not in hpd:
+            hpd[hp.Hero.id] = []
+        hpd[hp.Hero.id] += [hp.points]
+
+
+    for h in heroes_query:
+        if h.Hero.id not in hpd:
+            hpd[h.Hero.id] = []
+
+        if h.wins is None:
+            h.wins = 0
+
+        if h.played is None:
+            h.played = 0
+
+        if h.played > 0:
+            win_pct = (round(float(h.wins)/h.played*100,1))
+        else:
+            win_pct = (round(float(0.0)*100,1))
+        
+        if h.points_avg is not None:
+            h.points_avg = round(h.points_avg, 1)
+        else:
+            h.points_avg = 0.0
+
+        kda = "&infin;"
+        if h.deaths_sum > 0:
+            kda = str(round(float(h.kills_sum + h.assists_sum) / (h.deaths_sum), 1))
+        if h.played == 0:
+            kda = "0.0"
+
+
+
+
+        # arbitrary scaling factor for prettier numbers
+        win_wilson = round(wilson(h.played, h.wins)*100,1)
+
+        ci = confidence_interval(hpd[h.Hero.id])
+
+        points_lb_ci = 0.0  
+
+        if ci != None:
+            points_lb_ci = round(ci[0],1)
+        
+        if points_lb_ci < 0:
+            points_lb_ci = 0.0
+
+        h.__setattr__("win_pct", win_pct)            
+        h.__setattr__("kda", kda)
+        h.__setattr__("win_wilson", win_wilson)
+        h.__setattr__("points_lb_ci", points_lb_ci)
+
+    heroes_query_best = []
+    heroes_query_new = []
+
+
+    for i in range(0, 20):
+        max_w = -1
+        max_h = None
+        for h in heroes_query:
+            if h not in heroes_query_best:
+                if h.played >=5 and h.wins >= 3:
+                    if h.win_wilson > max_w:
+                        max_w = h.win_wilson
+                        max_h = h
+        heroes_query_best += [max_h]
+
+
+    for i in range(0, 20):
+        max_w = -1
+        max_h = None
+        for h in heroes_query:
+            if h not in heroes_query_new:
+                if h.played < 5 or h.wins < 3:
+                    if h.win_wilson > max_w:
+                        max_w = h.win_wilson
+                        max_h = h
+        heroes_query_new += [max_h]
+
+
+
+    title = player_name + "'s Heroes"
+
+    return render_template("player-suggestions.html",
+                           heroes_best = heroes_query_best,
+                           heroes_new = heroes_query_new,
+                           player_name = player_name,
+                           title = title,
+                           highlight = [])

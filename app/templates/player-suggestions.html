@@ -5,13 +5,14 @@
     <h2>{{player_name}}</h2>
   </div>
   <div class="span12">
-    <h3>Heroes</h3>
+    <h3>Suggestions</h3>
     
 
   </div>
 </div>
 <div class="row">
   <div class="span9">
+      <h4>Best Heroes</h4>
     <div class="well">   
     <table class="table table-striped table-condensed sortable" id="sortableheroes">
       <thead>
@@ -32,7 +33,7 @@
       </thead>
 
       <tbody class="list">
-	{% for h in heroes %}
+	{% for h in heroes_best %}
 	<tr>
 	  <td></td>
 	  <td>	      
@@ -74,59 +75,80 @@
     </table>
    
     </div>
-    <div class="well">
-<p>
-      <small>
-    <dl>
 
-<dt>
-What are lb_ci points?
-<dd>
-lb_ci stands for the lower bound of a 95% confidence
-interval. This is useful to take into account both how well you've
-played a hero and the number of times you've played. Technically,
-we're 95% confident that your true hero points average for that hero
-will be at least the lb_ci points. For more details on how
-confidence intervals work, see
-the <a href="http://en.wikipedia.org/wiki/Confidence_interval">Wikipedia article</a>.
-</dd> 
-    <dt>
-    What is win WSI?
-    </dt>
-    <dd>The WSI stands for <A href="http://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval">Wilson
-    score interval</a>. We
-    use the WSI to generate a single number that
-    takes into both how successful a hero has been and the number of
-    times it has been played. 
-      <p>
-Higher is better.</dd>
-    <dt>Technical Details</dt>
-<dd>
- See this <a href="http://www.evanmiller.org/how-not-to-sort-by-average-rating.html">blog post</a>.
-</dd>
+    <h4>Heroes to Try</h4>
+    <div class="well">   
+    <table class="table table-striped table-condensed sortable" id="sortableheroes">
+      <thead>
+	<tr>
+	  <th class="unsortable"></th>
+	  <th class="unsortable"></th>
+	  <th>hero</th>
+	  <th class="num">played</th>
+	  <th class="num">wins</th>
+	  <th class="num">win %</th>
+	  <th class="num">win WSI</th>
+	  <th class="num">kda</th>
+	  <!-- possibly kills, deaths, assists, gpm, xpm averages -->
+	  <th class="points">avg. points</th>
+	  <th class="points">lb_ci points</th>
+	</tr>
+	
+      </thead>
 
-<dt>On the difference between WSI and hero points</dt>
-<dd>
-Sorting by your win WSI will likely do a good job
-of showing you the hero you're most likely to win with based on your
-data so far. In contrast, hero points are more about how you perform on that
-hero, <i>relative to the people you play with and against</i>. That
-means you may do better than most people on a hero and thus garner a high
-hero score, but if the hero sucks then you'll still lose quite a bit
-(looking at you, Meepo). Keep this in mind when comparing hero points
-and win WSI.</dd>
+      <tbody class="list">
+	{% for h in heroes_new %}
+	<tr>
+	  <td></td>
+	  <td>	      
+	    <a href="{{url_for('player_hero_matches',
+		     name=player_name, hname=h.Hero.short_name())}}">
+	      {{h.Hero.img_inline()|safe}}
+	    </a>
+	  </td>
+	  <td>
+	    {% if h.Hero.localized_name in highlight %}
+	    <b>
+	      {% endif %}
+	      <a href="{{url_for('player_hero_matches',
+	   name=player_name, hname=h.Hero.short_name())}}">
+	    {{h.Hero.localized_name}}
+	    </a>
+	    {% if h.Hero.localized_name in highlight %}
+	    </b>
+	      {% endif %}
+	  </td>
+	  <td class="num">{{h.played}}</td>
+	  <td class="num">{{h.wins}}</td>
+	  <td class="num">{{h.win_pct}}</td>
+	  <td class="num">{{h.win_wilson}}</td>
+	  <td class="num">{{h.kda|safe}}</td>
 
-</dl>
-</small>
-</p>
-      </div>
+	  {% import 'hero-points.html' as hero %}
+
+	  <td class="points">
+	    {{ hero.points(h.points_avg) }}
+	  </td>
+	  <td class="points">
+	    {{ hero.points(h.points_lb_ci) }}
+	  </td>
+
+	</tr>
+	{% endfor %}
+      </tbody>
+    </table>
+   
+    </div>
+
+
   </div>
   <div class="span3">
     <div class="well">
       <ul class="nav nav-pills nav-stacked">
-	<li><a href="{{url_for('player', name=player_name)}}">Matches</a></li>
-	<li class="active"><a href="#">Heroes</a></li>
-	<li><a href="{{url_for('player_suggestions', name=player_name)}}">Suggestions</a></li>
+	<li><a href="{{url_for('player',
+	name=player_name)}}">Matches</a></li>
+	<li><a href="{{url_for('player_heroes', name=player_name)}}">Heroes</a></li>
+	<li class="active"><a href="#">Suggestions</a></li>
 	<li class="disabled"><a href="">Records</a></li>
 	<li class="disabled"><a href="">Trends</a></li>
 	<li class="disabled"><a href="">Achievements</a></li>
