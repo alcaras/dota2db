@@ -564,7 +564,7 @@ def player_suggestions(name):
 
 
 
-    title = player_name + "'s Heroes"
+    title = player_name + "'s Suggestions"
 
     return render_template("player-suggestions.html",
                            heroes_best = heroes_query_best,
