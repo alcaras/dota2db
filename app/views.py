@@ -143,17 +143,20 @@ def matches_and_players(matches):
                 mods = {}
                 mods["solo"] = {"kills" : 0.4,
                                 "deaths" : -0.35,
+                                "assists" : 0, # nothing for assists
                                 "last_hits" : 0.002,
                                 "gold_per_min" : 0.002,
                                 "xp_per_min" : 0.003}
                 mods["carry"] = {"kills" : 0.3,
                                 "deaths" : -0.2,
+                                "assists" : 0, # nothing for assists
                                 "last_hits" : 0.004,
                                 "gold_per_min" : 0.003,
-#                                "xp_per_min" : 0.003,
+                                "xp_per_min" : 0,
                 }
                 mods["support"] = {"kills" : 0.2,
                                    "deaths" : -0.05,
+                                   "assists" : 0.2,
                                    "last_hits" : 0.001,
                                    "gold_per_min" : 0.001,
                                    "xp_per_min" : 0.004}
