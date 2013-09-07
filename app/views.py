@@ -36,6 +36,9 @@ def prepare_match_preview():
     fields = [ "player_slot",
                "player_name",
                "kda",
+               "solo",
+               "carry",
+               "support",
                "hero_points",
                "hero_icon",
                "kills",
@@ -43,7 +46,7 @@ def prepare_match_preview():
                "assists",
                "gold_per_min",
                "xp_per_min",
-               "last_hits_per_min",
+               "last_hits",
                "teamfight_participation",
                "items"
                ]
@@ -53,6 +56,9 @@ def prepare_match_full():
     fields = [ "player_slot",
                "player_name",
                "kda",
+               "solo",
+               "carry",
+               "support",
                "hero_points",
                "hero_icon",
                "level",
@@ -129,6 +135,37 @@ def matches_and_players(matches):
                                                                   (p.deaths), 1))))
                 else:
                     p.__setattr__("kda", "&infin;")
+
+
+                # calc support, carry, solo scores
+                # from 
+                # dota2.com/international/fantasy/rules
+                mods = {}
+                mods["solo"] = {"kills" : 0.4,
+                                "deaths" : -0.35,
+                                "last_hits" : 0.002,
+                                "gold_per_min" : 0.002,
+                                "xp_per_min" : 0.003}
+                mods["carry"] = {"kills" : 0.3,
+                                "deaths" : -0.2,
+                                "last_hits" : 0.004,
+                                "gold_per_min" : 0.003,
+#                                "xp_per_min" : 0.003,
+                }
+                mods["support"] = {"kills" : 0.2,
+                                   "deaths" : -0.05,
+                                   "last_hits" : 0.001,
+                                   "gold_per_min" : 0.001,
+                                   "xp_per_min" : 0.004}
+
+                scores = {}
+                for k, v in mods.iteritems():
+                    scores[k] = 0.0
+                    for l, w in mods[k].iteritems():
+                        scores[k] += p.__dict__[l] * w
+                    p.__setattr__(k, round(scores[k], 1))
+              
+                                
                 
                 if match.duration/60 != 0:
                     p.__setattr__("lhpm", (str(round(float(p.last_hits) /

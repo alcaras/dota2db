@@ -17,7 +17,9 @@ td.large_number {
 }
 
 th.points,
-td.points {
+td.points,
+th.fantasy-points,
+th.fantasy-points {
     text-align: center;
 
 }

@@ -1,0 +1,19 @@
+{% macro points(points) -%}
+{% if points   >= 8 %}
+<span class="badge badge-inverse">
+{% elif points >= 7 %}
+<span class="badge badge-epic">
+{% elif points >= 6 %}
+<span class="badge badge-info">
+{% elif points >= 4 %}
+<span class="badge badge-success">
+{% elif points >= 3 %}
+<span class="badge badge-warning">
+{% elif points <= 0 %}
+<span class="badge">
+{% else %}
+<span class="badge badge-important">
+{% endif %}
+{{points}}
+</span>
+{%- endmacro %}

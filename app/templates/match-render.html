@@ -5,6 +5,12 @@
 <th class="name"></th>
 {% elif field == 'kda' %}
 <th class="number">kda</th>     
+{% elif field == 'solo' %}
+<th class="fantasy_points">solo</th>  
+{% elif field == 'carry' %}
+<th class="fantasy_points">carry</th>  
+{% elif field == 'support' %}
+<th class="fantasy_points">sprt</th>  
 {% elif field == 'hero_points' %}
 <th class="points">points</th>  
 {% elif field == 'hero_icon' %}
@@ -69,6 +75,21 @@
 </td>
 {% elif field == 'kda' %}
 <td class="number">{{ player.kda|safe }}</td>
+{% elif field == 'solo' %}
+<td class="fantasy_points">
+  {% import 'fantasy-points.html' as fantasy %}
+  {{ fantasy.points(player.solo) }}
+</td>
+{% elif field == 'carry' %}
+<td class="fantasy_points">
+  {% import 'fantasy-points.html' as fantasy %}
+  {{ fantasy.points(player.carry) }}
+</td>
+{% elif field == 'support' %}
+<td class="fantasy_points">
+  {% import 'fantasy-points.html' as fantasy %}
+  {{ fantasy.points(player.support) }}
+</td>
 {% elif field == 'hero_points' %}
 <td class="points">
   {% import 'hero-points.html' as hero %}
