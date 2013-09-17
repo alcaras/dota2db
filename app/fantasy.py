@@ -55,10 +55,9 @@ def calculate_scaled_fantasy_scores(p):
         for l, w in mods[k].iteritems():
             scores[k] += p[l] * w
 
-        if scaled == True:
-            scores[k] += offset[k]
-            scores[k] *= scale[k]
-            scores[k] = int(round(scores[k], 0))
+        scores[k] += offset[k]
+        scores[k] *= scale[k]
+        scores[k] = int(round(scores[k], 0))
 
     return scores
 
