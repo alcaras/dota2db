@@ -4,6 +4,7 @@ import string
 import operator
 
 
+
 from flask import render_template
 from flask import abort
 from flask import request
@@ -18,6 +19,8 @@ from flask import g
 
 from sqlalchemy.sql import func
 from sqlalchemy import or_, and_
+
+from fantasy import *
 
 from models import *
 
@@ -39,7 +42,7 @@ def prepare_match_preview():
                "solo",
                "carry",
                "support",
-               "hero_points",
+#               "hero_points",
                "hero_icon",
                "kills",
                "deaths",
@@ -59,7 +62,7 @@ def prepare_match_full():
                "solo",
                "carry",
                "support",
-               "hero_points",
+#               "hero_points",
                "hero_icon",
                "level",
                "kills",
@@ -137,38 +140,10 @@ def matches_and_players(matches):
                     p.__setattr__("kda", "&infin;")
 
 
-                # calc support, carry, solo scores
-                # from 
-                # dota2.com/international/fantasy/rules
-                mods = {}
-                mods["solo"] = {"kills" : 0.4,
-                                "deaths" : -0.35,
-                                "assists" : 0, # nothing for assists
-                                "last_hits" : 0.002,
-                                "gold_per_min" : 0.002,
-                                "xp_per_min" : 0.003}
-                mods["carry"] = {"kills" : 0.3,
-                                "deaths" : -0.2,
-                                "assists" : 0, # nothing for assists
-                                "last_hits" : 0.004,
-                                "gold_per_min" : 0.003,
-                                "xp_per_min" : 0,
-                }
-                mods["support"] = {"kills" : 0.2,
-                                   "deaths" : -0.05,
-                                   "assists" : 0.2,
-                                   "last_hits" : 0.001,
-                                   "gold_per_min" : 0.001,
-                                   "xp_per_min" : 0.004}
-
-                scores = {}
-                for k, v in mods.iteritems():
-                    scores[k] = 0.0
-                    for l, w in mods[k].iteritems():
-                        scores[k] += p.__dict__[l] * w
-                    p.__setattr__(k, round(scores[k], 1))
-              
-                                
+                ## scores
+                scores = calculate_fantasy_scores(p.__dict__, scaled=True)
+                for k, v in scores.iteritems():
+                    p.__setattr__(k, v)
                 
                 if match.duration/60 != 0:
                     p.__setattr__("lhpm", (str(round(float(p.last_hits) /
