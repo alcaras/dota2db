@@ -22,7 +22,8 @@ def get_scale_factors():
 
 # returns scaled scores as a dict with support, carry, solo
 # when passed a player dictionary
-def calculate_fantasy_scores(p, scaled=False):
+             
+def calculate_scaled_fantasy_scores(p):
     # dota2.com/international/fantasy/rules
     mods = {}
     mods["solo"] = {"kills" : 0.4,

@@ -141,7 +141,7 @@ def matches_and_players(matches):
 
 
                 ## scores
-                scores = calculate_fantasy_scores(p.__dict__, scaled=True)
+                scores = calculate_scaled_fantasy_scores(p.__dict__)
                 for k, v in scores.iteritems():
                     p.__setattr__(k, v)
                 

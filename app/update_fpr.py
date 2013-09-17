@@ -1,7 +1,44 @@
 # update fantasy point range
 # we do this once a day to make fantasy points scale between 0 and 100
 
-from fantasy import calculate_fantasy_scores
+def calculate_fantasy_scores(p):
+    # dota2.com/international/fantasy/rules
+    mods = {}
+    mods["solo"] = {"kills" : 0.4,
+                    "deaths" : -0.35,
+                    "assists" : 0, # nothing for assists
+                    "last_hits" : 0.002,
+                    "gold_per_min" : 0.002,
+                    "xp_per_min" : 0.003}
+    mods["carry"] = {"kills" : 0.3,
+                     "deaths" : -0.2,
+                     "assists" : 0, # nothing for assists
+                     "last_hits" : 0.004,
+                     "gold_per_min" : 0.003,
+                     "xp_per_min" : 0,
+                     }
+    mods["support"] = {"kills" : 0.2,
+                       "deaths" : -0.05,
+                       "assists" : 0.2,
+                       "last_hits" : 0.001,
+                       "gold_per_min" : 0.001,
+                       "xp_per_min" : 0.004}
+
+    (offset, scale) = get_scale_factors()
+
+
+    scores = {}
+    for k, v in mods.iteritems():
+        scores[k] = 0.0
+        for l, w in mods[k].iteritems():
+            scores[k] += p[l] * w
+
+        if scaled == True:
+            scores[k] += offset[k]
+            scores[k] *= scale[k]
+            scores[k] = int(round(scores[k], 0))
+
+    return scores
 
 from models import *
 import numpy
