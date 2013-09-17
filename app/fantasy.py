@@ -1,6 +1,6 @@
 from fpr import fantasy_min, fantasy_max
 
-def get_scale_factors():
+def get_scale_factors(hero_id):
     vectors = ["solo", "carry", "support"]
 
     offset =  {"solo" : 0.0,
@@ -12,8 +12,8 @@ def get_scale_factors():
              "support" : 1.0}
 
     for v in vectors:
-        vmin = fantasy_min[v]
-        vmax = fantasy_max[v]
+        vmin = fantasy_min[hero_id][v]
+        vmax = fantasy_max[hero_id][v]
         
         offset[v] = 0.0-vmin # set to 100
         scale[v] = 100.0/(vmax-vmin)
@@ -23,7 +23,7 @@ def get_scale_factors():
 # returns scaled scores as a dict with support, carry, solo
 # when passed a player dictionary
              
-def calculate_scaled_fantasy_scores(p):
+def calculate_scaled_fantasy_scores(p, hero_id):
     # dota2.com/international/fantasy/rules
     mods = {}
     mods["solo"] = {"kills" : 0.4,
@@ -46,7 +46,7 @@ def calculate_scaled_fantasy_scores(p):
                        "gold_per_min" : 0.001,
                        "xp_per_min" : 0.004}
 
-    (offset, scale) = get_scale_factors()
+    (offset, scale) = get_scale_factors(hero_id)
 
 
     scores = {}

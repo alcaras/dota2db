@@ -103,6 +103,11 @@ for v in vectors:
 first = True
     
 for i, hero in  enumerate(heroes):
+    hmin[hero.id] = {}
+    hmax[hero.id] = {}
+    for v in vectors:
+        hmin[hero.id][v] = 0
+        hmax[hero.id][v] = 0
     # just pull in everything
     print "Analyzing", hero.localized_name,
     print "(" + str(i+1) + " of", str(len(heroes)) + ")",
@@ -113,14 +118,14 @@ for i, hero in  enumerate(heroes):
 
     for v in vectors:
         if first == True:
-            hmin[v] = mina[v]
-            hmax[v] = maxa[v]
+            hmin[hero.id][v] = mina[v]
+            hmax[hero.id][v] = maxa[v]
             first = False
         else:
             if mina[v] < hmin[v]:
-                hmin[v] = mina[v]
+                hmin[hero.id][v] = mina[v]
             if maxa[v] > hmax[v]:
-                hmax[v] = maxa[v]
+                hmax[hero.id][v] = maxa[v]
 
 
 fpr_minmax = (hmin, hmax)
