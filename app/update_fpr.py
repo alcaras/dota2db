@@ -24,19 +24,11 @@ def calculate_fantasy_scores(p):
                        "gold_per_min" : 0.001,
                        "xp_per_min" : 0.004}
 
-    (offset, scale) = get_scale_factors()
-
-
     scores = {}
     for k, v in mods.iteritems():
         scores[k] = 0.0
         for l, w in mods[k].iteritems():
             scores[k] += p[l] * w
-
-        if scaled == True:
-            scores[k] += offset[k]
-            scores[k] *= scale[k]
-            scores[k] = int(round(scores[k], 0))
 
     return scores
 
