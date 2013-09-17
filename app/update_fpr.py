@@ -1,7 +1,7 @@
 # update fantasy point range
 # we do this once a day to make fantasy points scale between 0 and 100
 
-from fantasy import *
+from fantasy import calculate_fantasy_scores
 
 from models import *
 import numpy
