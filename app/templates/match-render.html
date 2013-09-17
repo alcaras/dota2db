@@ -97,7 +97,13 @@
 </td>
 {% elif field == 'hero_icon' %}
 <td class="hero">
-    <a href="{{url_for('hero_matches', name=player.hero.short_name())}}">{{player.hero.img_inline()|safe}}</a>
+    <a href="
+{% if player.player_name != '' %}
+{{ url_for('player_hero_matches', name=player.player_name, hname=player.hero.short_name()) }}
+{% else %}
+{{ url_for('hero_matches', name=player.hero.short_name()) }}
+{% endif %}
+">{{player.hero.img_inline()|safe}}</a>
 </td>
 {% elif field == 'level' %}
 <td class="number">{{player.level}}</td>
