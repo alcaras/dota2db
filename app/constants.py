@@ -12,7 +12,7 @@ NAME_ID = {
  "Krygore" : 9929964,
  "Vorsh" : 703282,
 
- "m1gemini" : 8807692,
+# "m1gemini" : 8807692,
 
  "Boozie" : 537293,
 
