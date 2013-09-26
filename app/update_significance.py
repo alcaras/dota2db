@@ -52,7 +52,7 @@ for i, m in enumerate(matches):
         print i+1, "/", len(matches)
 
 
-    valid_modes = [0, 1, 2, 3, 4, 5, 12] # 0 is valid for legacy reasons
+    valid_modes = [0, 1, 2, 3, 4, 5, 12, 16] # 0 is valid for legacy reasons
     if m.game_mode not in valid_modes:
         print "marking", m.id, "as insignificant: ",
         print "not a valid a game mode", m.game_mode,

@@ -41,12 +41,21 @@ GAME_MODES = {
     10 : 'Tutorial',
     11 : 'Mid Only',
     12 : 'Least Played',
-    13 : 'New Player Pool'
+    13 : 'New Player Pool',
+    14 : '?',
+    15 : '?',
+    16 : "Captain's Draft",
     }
 
 CLUSTERS = {
     111 : 'US West',
+    112 : 'US West',
+    113 : 'US West',
+    114 : 'US West',
     122 : 'US East',
+    123 : 'US East',
+    124 : 'US East',
+    125 : 'US East',
 }
 
 
