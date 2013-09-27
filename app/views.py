@@ -1,5 +1,7 @@
+
 from app import app, db 
 
+import numpy
 import string
 import operator
 
@@ -32,6 +34,8 @@ import datetime
 import pprint
 pp = pprint.PrettyPrinter(indent = 4)
 
+# should add this to constants
+vectors = ["solo", "carry", "support"]
 
 
 
@@ -300,6 +304,29 @@ def player_heroes(name):
                                             Player.account_id==player_id).\
                                             all()
 
+    every_match = db.session.query(Player, Hero).join(Player.match).\
+                  join(Hero).filter(Match.is_significant_p==True,
+                                    Player.account_id==player_id).all()
+
+    for em in every_match:
+        scores = calculate_scaled_fantasy_scores(em.Player.__dict__, em.Hero.id)
+        for k, v in scores.iteritems():
+            em.Player.__setattr__(k, v)
+
+    # fantasy point distribution
+    fsd = {}
+    for a in vectors:
+        fsd[a] = {}
+
+    for em in every_match:
+        for a in vectors:
+            if em.Hero.id not in fsd[a]:
+                fsd[a][em.Hero.id] = []
+            fsd[a][em.Hero.id] += [em.Player.__dict__[a]]
+
+        
+
+
     # hero point distributions
     hpd = {}
        
@@ -312,6 +339,26 @@ def player_heroes(name):
     for h in heroes_query:
         if h.Hero.id not in hpd:
             hpd[h.Hero.id] = []
+
+        for a in vectors:
+            if h.Hero.id not in fsd[a]:
+                fsd[a][h.Hero.id] = []
+            aavg = round(numpy.mean(fsd[a][h.Hero.id]),1)
+            aaci = confidence_interval(fsd[a][h.Hero.id])
+            aaci_points = 0.0
+            if aaci != None:
+                aaci_points = round(aaci[0],1)
+        
+            if aaci_points < 0:
+                aaci_points = 0.0
+
+            if aaci_points > 0:
+                aaci_points += 0 # for prettier numbers
+
+            if aavg is not None and len(fsd[a][h.Hero.id])>0:
+                h.__setattr__("fantasy_" + a, aaci_points)
+            else:
+                h.__setattr__("fantasy_" + a, 0)
 
         if h.wins is None:
             h.wins = 0
@@ -493,6 +540,30 @@ def player_suggestions(name):
                                             Player.account_id==player_id).\
                                             all()
 
+
+    every_match = db.session.query(Player, Hero).join(Player.match).\
+                  join(Hero).filter(Match.is_significant_p==True,
+                                    Player.account_id==player_id).all()
+
+    for em in every_match:
+        scores = calculate_scaled_fantasy_scores(em.Player.__dict__, em.Hero.id)
+        for k, v in scores.iteritems():
+            em.Player.__setattr__(k, v)
+
+    # fantasy point distribution
+    fsd = {}
+    for a in vectors:
+        fsd[a] = {}
+
+    for em in every_match:
+        for a in vectors:
+            if em.Hero.id not in fsd[a]:
+                fsd[a][em.Hero.id] = []
+            fsd[a][em.Hero.id] += [em.Player.__dict__[a]]
+
+        
+
+
     # hero point distributions
 
     hpd = {}
@@ -504,6 +575,27 @@ def player_suggestions(name):
 
 
     for h in heroes_query:
+
+        for a in vectors:
+            if h.Hero.id not in fsd[a]:
+                fsd[a][h.Hero.id] = []
+            aavg = round(numpy.mean(fsd[a][h.Hero.id]),1)
+            aaci = confidence_interval(fsd[a][h.Hero.id])
+            aaci_points = 0.0
+            if aaci != None:
+                aaci_points = round(aaci[0],1)
+        
+            if aaci_points < 0:
+                aaci_points = 0.0
+
+            if aaci_points > 0:
+                aaci_points += 0 # for prettier numbers
+
+            if aavg is not None and len(fsd[a][h.Hero.id])>0:
+                h.__setattr__("fantasy_" + a, aaci_points)
+            else:
+                h.__setattr__("fantasy_" + a, 0)
+
         if h.Hero.id not in hpd:
             hpd[h.Hero.id] = []
 

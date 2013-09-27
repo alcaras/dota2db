@@ -26,8 +26,9 @@
 	  <th class="num">win WSI</th>
 	  <th class="num">kda</th>
 	  <!-- possibly kills, deaths, assists, gpm, xpm averages -->
-	  <th class="points">avg. points</th>
-	  <th class="points">lb_ci points</th>
+	  <th class="num">solo</th>
+	  <th class="num">carry</th>
+	  <th class="num">support</th>
 	</tr>
 	
       </thead>
@@ -60,14 +61,20 @@
 	  <td class="num">{{h.win_wilson}}</td>
 	  <td class="num">{{h.kda|safe}}</td>
 
-	  {% import 'hero-points.html' as hero %}
 
-	  <td class="points">
-	    {{ hero.points(h.points_avg) }}
+
+	  {% import 'fantasy-points.html' as fantasy %}
+
+	  <td class="num">
+	    {{ (h.fantasy_solo) }}
 	  </td>
-	  <td class="points">
-	    {{ hero.points(h.points_lb_ci) }}
+	  <td class="num">
+	    {{ (h.fantasy_carry) }}
 	  </td>
+	  <td class="num">
+	    {{ (h.fantasy_support) }}
+	  </td>
+
 
 	</tr>
 	{% endfor %}
@@ -90,8 +97,10 @@
 	  <th class="num">win WSI</th>
 	  <th class="num">kda</th>
 	  <!-- possibly kills, deaths, assists, gpm, xpm averages -->
-	  <th class="points">avg. points</th>
-	  <th class="points">lb_ci points</th>
+	  <th class="num">solo</th>
+	  <th class="num">carry</th>
+	  <th class="num">support</th>
+
 	</tr>
 	
       </thead>
@@ -124,14 +133,17 @@
 	  <td class="num">{{h.win_wilson}}</td>
 	  <td class="num">{{h.kda|safe}}</td>
 
-	  {% import 'hero-points.html' as hero %}
+	  {% import 'fantasy-points.html' as fantasy %}
+	  <td class="num">
+	    {{ (h.fantasy_solo) }}
+	  </td>
+	  <td class="num">
+	    {{ (h.fantasy_carry) }}
+	  </td>
+	  <td class="num">
+	    {{ (h.fantasy_support) }}
+	  </td>
 
-	  <td class="points">
-	    {{ hero.points(h.points_avg) }}
-	  </td>
-	  <td class="points">
-	    {{ hero.points(h.points_lb_ci) }}
-	  </td>
 
 	</tr>
 	{% endfor %}
